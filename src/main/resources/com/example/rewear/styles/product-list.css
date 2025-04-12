@@ -1,0 +1,111 @@
+.main-container {
+    -fx-background-color: #f5f5f5;
+}
+
+.header {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+}
+
+.welcome-text {
+    -fx-fill: #333333;
+}
+
+.user-avatar {
+    -fx-background-radius: 20;
+    -fx-background-color: #e0e0e0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #666666;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-text-fill: #ff6b6b;
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #999999;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+}
+
+.categories-scroll {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.categories-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.categories-container {
+    -fx-background-color: #ffe0b2;
+    -fx-padding: 10;
+}
+
+.category-button {
+    -fx-background-color: white;
+    -fx-text-fill: #666666;
+    -fx-padding: 8 16;
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.category-button:hover {
+    -fx-background-color: #ff6b6b;
+    -fx-text-fill: white;
+}
+
+.products-scroll {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.products-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.products-grid {
+    -fx-background-color: transparent;
+}
+
+/* Product Card Styles - These will be applied dynamically */
+.product-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+    -fx-padding: 15;
+}
+
+.product-image {
+    -fx-background-radius: 5 5 0 0;
+}
+
+.product-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.product-brand {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+}
+
+.product-price {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff6b6b;
+}
+
+.rating {
+    -fx-text-fill: #ffd700;
+} 
