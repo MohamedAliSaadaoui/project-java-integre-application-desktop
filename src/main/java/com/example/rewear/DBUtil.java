@@ -10,7 +10,7 @@ public class DBUtil {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3306/rewear", "root", ""
+                    "jdbc:mysql://127.0.0.1:3306/rewear_db", "root", ""
             );
             System.out.println("✅ Connected to database.");
         } catch (Exception e) {
