@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.Login">
+
+    <center>
+        <VBox alignment="CENTER" spacing="15.0">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Connexion" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+            <TextField fx:id="emailField" promptText="Adresse e-mail" prefWidth="250"/>
+            <PasswordField fx:id="passwordField" promptText="Mot de passe" prefWidth="250"/>
+
+            <Button fx:id="loginButton" text="Se connecter" prefWidth="150"/>
+            <Hyperlink fx:id="forgotPasswordLink" text="Mot de passe oublié ?" />
+        </VBox>
+
+    </center>
+
+</BorderPane>
