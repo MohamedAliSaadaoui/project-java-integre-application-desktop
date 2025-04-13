@@ -23,6 +23,7 @@ import java.io.IOException;
 import javafx.stage.Stage;
 import com.example.rewear.service.CartService;
 import com.example.rewear.service.WishlistService;
+import javafx.event.ActionEvent;
 
 public class ProductController extends BaseController {
     private final ProductDAO productDAO = new ProductDAO();
@@ -39,6 +40,18 @@ public class ProductController extends BaseController {
     @FXML private Button addButton;
     @FXML private Button editButton;
     @FXML private Button deleteButton;
+    @FXML private Button allCategoryButton;
+    @FXML private Button womenCategoryButton;
+    @FXML private Button menCategoryButton;
+    @FXML private Button kidsCategoryButton;
+    @FXML private Button accessoriesCategoryButton;
+    @FXML private Button shoesCategoryButton;
+    @FXML private Button bagsCategoryButton;
+    @FXML private Button jewelryCategoryButton;
+    @FXML private Button sportswearCategoryButton;
+    @FXML private Button searchButton;
+
+    private String currentCategory = "All";
 
     @FXML
     public void initialize() {
@@ -220,6 +233,7 @@ public class ProductController extends BaseController {
         });
         cartButton.setOnAction(event -> navigateToCart());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterProducts(newValue));
+        searchButton.setOnAction(event -> filterProducts(searchField.getText()));
         
         wishlistButton.setOnAction(e -> showWishlist());
         ordersButton.setOnAction(e -> showOrders());
@@ -227,16 +241,37 @@ public class ProductController extends BaseController {
     }
 
     private void filterProducts(String searchText) {
-        if (searchText == null || searchText.isEmpty()) {
-            displayProducts();
-        } else {
-            // Filter products locally since we don't have searchProducts in DAO
-            ObservableList<Product> filtered = products.filtered(product ->
+        ObservableList<Product> filtered = products;
+        
+        // Apply category filter
+        if (!currentCategory.equals("All")) {
+            filtered = filtered.filtered(product ->
+                product.getGenre().equalsIgnoreCase(currentCategory)
+            );
+        }
+        
+        // Apply search text filter if present
+        if (searchText != null && !searchText.isEmpty()) {
+            filtered = filtered.filtered(product ->
                 product.getObjetAVendre().toLowerCase().contains(searchText.toLowerCase()) ||
                 product.getDescription().toLowerCase().contains(searchText.toLowerCase())
             );
-            products.setAll(filtered);
-            displayProducts();
+        }
+        
+        // Update the display with filtered products
+        productsGrid.getChildren().clear();
+        int column = 0;
+        int row = 0;
+        
+        for (Product product : filtered) {
+            VBox productCard = createProductCard(product);
+            productsGrid.add(productCard, column, row);
+            
+            column++;
+            if (column == 4) { // 4 products per row
+                column = 0;
+                row++;
+            }
         }
     }
 
@@ -281,22 +316,6 @@ public class ProductController extends BaseController {
         wishlistButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/heart-icon.svg", 20, 20));
         ordersButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/order-icon.svg", 20, 20));
         logoutButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/logout-icon.svg", 20, 20));
-        
-        // Create and set up search button if not already in FXML
-        Button searchButton = new Button();
-        searchButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/search-icon.svg", 20, 20));
-        searchButton.getStyleClass().add("search-button");
-        searchButton.setOnAction(e -> handleSearch());
-        
-        // Add search button to the search field's parent HBox
-        HBox searchContainer = (HBox) searchField.getParent();
-        if (!searchContainer.getChildren().contains(searchButton)) {
-            searchContainer.getChildren().add(searchButton);
-        }
-    }
-
-    private void handleSearch() {
-        filterProducts(searchField.getText());
     }
 
     private void navigateToCart() {
@@ -328,5 +347,28 @@ public class ProductController extends BaseController {
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to load product dialog");
         }
+    }
+
+    @FXML
+    private void handleCategoryFilter(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        currentCategory = clickedButton.getText();
+        
+        // Reset all buttons to default style
+        allCategoryButton.getStyleClass().remove("active");
+        womenCategoryButton.getStyleClass().remove("active");
+        menCategoryButton.getStyleClass().remove("active");
+        kidsCategoryButton.getStyleClass().remove("active");
+        accessoriesCategoryButton.getStyleClass().remove("active");
+        shoesCategoryButton.getStyleClass().remove("active");
+        bagsCategoryButton.getStyleClass().remove("active");
+        jewelryCategoryButton.getStyleClass().remove("active");
+        sportswearCategoryButton.getStyleClass().remove("active");
+        
+        // Add active style to clicked button
+        clickedButton.getStyleClass().add("active");
+        
+        // Filter products based on category
+        filterProducts(searchField.getText());
     }
 } 
