@@ -15,7 +15,8 @@ public class UserService implements Service<User> {
 
     @Override
     public void ajouter(User user) throws SQLException {
-        String sql = "INSERT INTO user (username, password, email, num_tel, date_naiss, adresse) VALUES (?, ?, ?, ?, ?, ?)";
+        // Mentionnez explicitement toutes les colonnes, y compris roles
+        String sql = "INSERT INTO user (username, password, email, num_tel, date_naiss, adresse, nb_article_achetes, nb_article_vendus, roles) VALUES (?, ?, ?, ?, ?, ?, 0, 0, '[\"ROLE_USER\"]')";
 
         PreparedStatement ps = cnx.prepareStatement(sql);
         ps.setString(1, user.getUsername());
