@@ -15,10 +15,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import javafx.geometry.Pos;
 import com.example.rewear.util.SVGLoader;
 import java.io.IOException;
 import javafx.stage.Stage;
+import com.example.rewear.service.CartService;
+import com.example.rewear.service.WishlistService;
 
 public class ProductController extends BaseController {
     private final ProductDAO productDAO = new ProductDAO();
@@ -73,6 +77,7 @@ public class ProductController extends BaseController {
     private VBox createProductCard(Product product) {
         VBox card = new VBox(10);
         card.getStyleClass().add("product-card");
+        card.setUserData(product);
 
         // Product Image
         ImageView imageView = new ImageView();
@@ -80,6 +85,16 @@ public class ProductController extends BaseController {
         imageView.setFitHeight(200);
         imageView.setPreserveRatio(true);
         imageView.getStyleClass().add("product-image");
+        
+        if (product.getPhoto() != null && !product.getPhoto().isEmpty()) {
+            try {
+                Image image = new Image(product.getPhoto());
+                imageView.setImage(image);
+            } catch (Exception e) {
+                // Set default image if loading fails
+                // imageView.setImage(new Image("/com/example/rewear/images/default-product.png"));
+            }
+        }
 
         // Product Title
         Label titleLabel = new Label(product.getObjetAVendre());
@@ -89,43 +104,73 @@ public class ProductController extends BaseController {
         // Description
         Label descLabel = new Label(product.getDescription());
         descLabel.getStyleClass().add("product-brand");
+        descLabel.setWrapText(true);
 
         // Price
         Label priceLabel = new Label(String.format("$ %.2f", product.getPrixDeVente()));
         priceLabel.getStyleClass().add("product-price");
 
-        // Rating (using a default value since we don't have rating in the model)
-        HBox ratingBox = createRatingStars(5.0);
-        ratingBox.getStyleClass().add("rating");
+        // Buttons Container
+        HBox buttonsBox = new HBox(10);
+        buttonsBox.setAlignment(javafx.geometry.Pos.CENTER);
 
-        card.getChildren().addAll(imageView, titleLabel, descLabel, priceLabel, ratingBox);
+        // Add to Cart Button
+        Button addToCartBtn = new Button("Add to Cart");
+        addToCartBtn.getStyleClass().add("add-to-cart-button");
+        addToCartBtn.setOnAction(e -> {
+            e.consume(); // Prevent event from bubbling up to card click
+            handleAddToCart(product);
+        });
+
+        // Add to Wishlist Button
+        Button wishlistBtn = new Button();
+        wishlistBtn.getStyleClass().add("wishlist-button");
+        Region heartIcon = new Region();
+        heartIcon.getStyleClass().add("heart-icon");
+        wishlistBtn.setGraphic(heartIcon);
+        wishlistBtn.setOnAction(e -> {
+            e.consume(); // Prevent event from bubbling up to card click
+            handleAddToWishlist(product);
+        });
+
+        buttonsBox.getChildren().addAll(addToCartBtn, wishlistBtn);
+
+        card.getChildren().addAll(imageView, titleLabel, descLabel, priceLabel, buttonsBox);
         
+        // Show product details when clicking on the card (except buttons)
         card.setOnMouseClicked(e -> showProductDetails(product));
         
         return card;
     }
 
-    private HBox createRatingStars(double rating) {
-        HBox starsBox = new HBox(2);
-        int fullStars = (int) rating;
-        boolean hasHalfStar = rating % 1 >= 0.5;
+    private void handleAddToCart(Product product) {
+        CartService.getInstance().addToCart(product, 1);
+        showAlert(Alert.AlertType.INFORMATION, "Added to Cart", 
+                 product.getObjetAVendre() + " has been added to your cart");
+    }
 
-        for (int i = 0; i < fullStars; i++) {
-            Label star = new Label("★");
-            starsBox.getChildren().add(star);
+    private void handleAddToWishlist(Product product) {
+        WishlistService.getInstance().addToWishlist(product);
+        showAlert(Alert.AlertType.INFORMATION, "Added to Wishlist", 
+                 product.getObjetAVendre() + " has been added to your wishlist");
+    }
+
+    private void showProductDetails(Product product) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/views/product-detail-view.fxml"));
+            Parent root = loader.load();
+            
+            ProductDetailController controller = loader.getController();
+            controller.setProduct(product);
+            
+            Stage stage = new Stage();
+            stage.setTitle(product.getObjetAVendre());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load product details");
         }
-
-        if (hasHalfStar) {
-            Label halfStar = new Label("½");
-            starsBox.getChildren().add(halfStar);
-        }
-
-        while (starsBox.getChildren().size() < 5) {
-            Label emptyStar = new Label("☆");
-            starsBox.getChildren().add(emptyStar);
-        }
-
-        return starsBox;
     }
 
     private void setupEventHandlers() {
@@ -195,17 +240,20 @@ public class ProductController extends BaseController {
         }
     }
 
-    private void showProductDetails(Product product) {
-        showAlert(Alert.AlertType.INFORMATION, "Product Details", 
-                 "Showing details for: " + product.getObjetAVendre());
-    }
-
     private void showCart() {
         showAlert(Alert.AlertType.INFORMATION, "Cart", "Opening cart...");
     }
 
     private void showWishlist() {
-        showAlert(Alert.AlertType.INFORMATION, "Wishlist", "Opening wishlist...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/views/wishlist-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) wishlistButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load wishlist view");
+        }
     }
 
     private void showOrders() {

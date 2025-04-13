@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import java.lang.String?>
+<?import java.net.URL?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.rewear.controller.WishlistController">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header with Back Button -->
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <Button fx:id="backButton" text="← Back to Products" onAction="#handleBack" styleClass="back-button"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="My Wishlist" styleClass="page-title"/>
+    </HBox>
+
+    <!-- Wishlist Table -->
+    <TableView fx:id="wishlistTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="imageColumn" text="Image" prefWidth="100"/>
+            <TableColumn fx:id="nameColumn" text="Product" prefWidth="200"/>
+            <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
+            <TableColumn fx:id="sizeColumn" text="Size" prefWidth="80"/>
+            <TableColumn fx:id="conditionColumn" text="Condition" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+        </columns>
+        <placeholder>
+            <Label text="Your wishlist is empty"/>
+        </placeholder>
+    </TableView>
+
+    <stylesheets>
+        <URL value="@../styles/wishlist.css"/>
+    </stylesheets>
+</VBox> 

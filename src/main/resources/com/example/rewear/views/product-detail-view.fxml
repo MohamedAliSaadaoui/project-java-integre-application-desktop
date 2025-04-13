@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+<VBox spacing="20" styleClass="detail-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.rewear.controller.ProductDetailController">
+    
+    <!-- Back Button -->
+    <Button fx:id="backButton" text="← Back" styleClass="back-button" onAction="#handleBack"/>
+    
+    <!-- Main Content -->
+    <HBox spacing="40">
+        <!-- Left Side - Product Image -->
+        <VBox alignment="CENTER" styleClass="image-container" minWidth="500">
+            <ImageView fx:id="productImage" fitWidth="450" fitHeight="450" preserveRatio="true"/>
+        </VBox>
+        
+        <!-- Right Side - Product Details -->
+        <VBox spacing="15" styleClass="details-container" maxWidth="500">
+            <Label fx:id="productName" styleClass="product-name"/>
+            
+            <Label fx:id="priceLabel" styleClass="price-label"/>
+            
+            <Label fx:id="stockStatus" styleClass="stock-status"/>
+            
+            <Separator/>
+            
+            <VBox spacing="10">
+                <Label text="Description:" styleClass="section-header"/>
+                <Text fx:id="descriptionText" styleClass="description-text" wrappingWidth="400"/>
+            </VBox>
+            
+            <Separator/>
+            
+            <VBox spacing="10">
+                <Label text="Product Details:" styleClass="section-header"/>
+                <GridPane vgap="10" hgap="20">
+                    <Label text="Genre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="genreLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Taille:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <Label fx:id="tailleLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    
+                    <Label text="État:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <Label fx:id="etatLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    
+                    <Label text="Couleur:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <Label fx:id="couleurLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
+            
+            <Separator/>
+            
+            <!-- Quantity Selector -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Quantity:"/>
+                <Spinner fx:id="quantitySpinner" min="1" max="99" initialValue="1" editable="true"/>
+            </HBox>
+            
+            <!-- Action Buttons -->
+            <HBox spacing="15">
+                <Button fx:id="addToCartButton" text="Add to cart" styleClass="add-to-cart-button" onAction="#handleAddToCart"/>
+                <Button fx:id="addToWishlistButton" styleClass="wishlist-button" onAction="#handleAddToWishlist">
+                    <graphic>
+                        <Region styleClass="heart-icon"/>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </HBox>
+    
+    <stylesheets>
+        <URL value="@../styles/product-detail.css"/>
+    </stylesheets>
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+</VBox> 
