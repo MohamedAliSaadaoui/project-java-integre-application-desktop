@@ -1,4 +1,4 @@
-package com.example.rewear;
+package com.example.rewear.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,4 +36,4 @@ public class DBUtil {
             }
         }
     }
-}
+} 

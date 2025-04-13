@@ -11,8 +11,12 @@ module com.example.rewear {
 
     opens com.example.rewear to javafx.fxml;
     opens com.example.rewear.controller to javafx.fxml;
+    opens com.example.rewear.model to javafx.fxml;
+    opens com.example.rewear.service to javafx.fxml;
     
     exports com.example.rewear;
     exports com.example.rewear.controller;
     exports com.example.rewear.util;
+    exports com.example.rewear.model;
+    exports com.example.rewear.service;
 }

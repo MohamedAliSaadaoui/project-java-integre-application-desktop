@@ -102,11 +102,22 @@ public class CartController {
     @FXML
     private void handleCheckout() {
         if (cartService.getCartItems().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Cart is empty", "Please add items to your cart before checking out.");
+            showAlert(Alert.AlertType.WARNING, "Empty Cart", "Please add items to your cart before proceeding to checkout.");
             return;
         }
-        // TODO: Implement checkout logic
-        showAlert(Alert.AlertType.INFORMATION, "Checkout", "Proceeding to checkout...");
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/views/checkout-view.fxml"));
+            if (loader.getLocation() == null) {
+                throw new IOException("Could not find checkout-view.fxml");
+            }
+            Parent root = loader.load();
+            Stage stage = (Stage) checkoutButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not load checkout view: " + e.getMessage());
+        }
     }
 
     @FXML

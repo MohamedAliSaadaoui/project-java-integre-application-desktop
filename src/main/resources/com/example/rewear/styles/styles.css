@@ -1,0 +1,60 @@
+/* Checkout View Styles */
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2196F3;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-text-fill: #1976D2;
+}
+
+.payment-section {
+    -fx-padding: 10;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 5;
+}
+
+.order-summary {
+    -fx-padding: 20;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 5;
+}
+
+.total-text {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.place-order-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.place-order-button:hover {
+    -fx-background-color: #388E3C;
+}
+
+/* Form Fields */
+.text-field {
+    -fx-pref-height: 35;
+    -fx-background-radius: 5;
+}
+
+.radio-button {
+    -fx-padding: 5 0;
+} 

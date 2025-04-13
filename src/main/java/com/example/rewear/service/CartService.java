@@ -55,4 +55,10 @@ public class CartService {
                 .mapToDouble(CartItem::getTotalPrice)
                 .sum();
     }
+
+    public double getCartTotal() {
+        return cartItems.stream()
+                .mapToDouble(item -> item.getProduct().getPrixDeVente() * item.getQuantity())
+                .sum();
+    }
 } 

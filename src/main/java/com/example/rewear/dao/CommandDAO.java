@@ -1,6 +1,6 @@
 package com.example.rewear.dao;
 
-import com.example.rewear.DBUtil;
+import com.example.rewear.util.DBUtil;
 import com.example.rewear.model.Command;
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox spacing="20" alignment="TOP_CENTER" stylesheets="@../styles/styles.css" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.example.rewear.controller.CheckoutController">
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button fx:id="backButton" text="← Back to Cart" onAction="#handleBack"/>
+    </HBox>
+
+    <TabPane fx:id="checkoutSteps" tabClosingPolicy="UNAVAILABLE">
+        <!-- Shipping Information Tab -->
+        <Tab text="Shipping Information">
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <GridPane vgap="10" hgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Full Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Phone:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="phoneField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <Label text="Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <TextField fx:id="addressField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                    <Label text="City:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="cityField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                    <Label text="Postal Code:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <TextField fx:id="postalCodeField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                </GridPane>
+
+                <Button text="Next" onAction="#handleNextToPayment" maxWidth="200" alignment="CENTER"/>
+            </VBox>
+        </Tab>
+
+        <!-- Payment Tab -->
+        <Tab text="Payment" disable="true">
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Text text="Select Payment Method"/>
+                
+                <VBox spacing="10">
+                    <RadioButton fx:id="creditCardRadio" text="Credit Card"/>
+                    <RadioButton fx:id="paypalRadio" text="PayPal"/>
+                    <RadioButton fx:id="cashOnDeliveryRadio" text="Cash on Delivery"/>
+                </VBox>
+
+                <VBox fx:id="creditCardForm" spacing="10" visible="false" managed="false">
+                    <TextField fx:id="cardNumberField" promptText="Card Number"/>
+                    <HBox spacing="10">
+                        <TextField fx:id="expiryField" promptText="MM/YY" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="cvvField" promptText="CVV" HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </VBox>
+
+                <Button text="Next" onAction="#handleNextToReview" maxWidth="200" alignment="CENTER"/>
+            </VBox>
+        </Tab>
+
+        <!-- Review Tab -->
+        <Tab text="Review Order" disable="true">
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Text text="Order Summary" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                
+                <VBox fx:id="orderItemsContainer" spacing="10"/>
+                
+                <GridPane vgap="5" hgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="100"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    
+                    <Label text="Subtotal:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="subtotalLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label text="Shipping:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="shippingLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Total:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="totalLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                </GridPane>
+
+                <Button text="Place Order" onAction="#handlePlaceOrder" maxWidth="200" alignment="CENTER"/>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox> 
