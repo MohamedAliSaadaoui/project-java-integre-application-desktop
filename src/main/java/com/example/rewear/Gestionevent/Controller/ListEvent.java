@@ -56,6 +56,8 @@ public class ListEvent implements Initializable {
 
     @FXML
     private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     private ObservableList<Event> eventList = FXCollections.observableArrayList();
     private EventDAO eventDAO;
@@ -189,6 +191,38 @@ public class ListEvent implements Initializable {
         } else {
             // Si aucun événement n'est sélectionné, afficher une alerte
             showAlert(Alert.AlertType.WARNING, "Aucun événement sélectionné", "Veuillez sélectionner un événement à modifier.");
+        }
+    }
+    @FXML
+    private void handleDelete(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/Gestionevent/DeleteEvent.fxml"));
+            Parent root = loader.load();
+
+            // Obtenez le contrôleur de la fenêtre de suppression
+            DeleteEvent deleteEventController = loader.getController();
+
+            // Passez l'événement à supprimer
+            Event selectedEvent = eventTable.getSelectionModel().getSelectedItem();
+            if (selectedEvent != null) {
+                deleteEventController.setEventToDelete(selectedEvent);
+
+                // Affichez la fenêtre de suppression
+                Stage stage = new Stage();
+                stage.setTitle("Supprimer un événement");
+                stage.setScene(new Scene(root));
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(deleteButton.getScene().getWindow());
+                stage.showAndWait();
+
+                // Rechargez les événements après la suppression
+                loadEvents();
+            } else {
+                showAlert(Alert.AlertType.WARNING, "Aucun événement sélectionné", "Veuillez sélectionner un événement à supprimer.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la fenêtre de suppression.");
         }
     }
 

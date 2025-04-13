@@ -89,7 +89,10 @@ public class EventDAO {
         String query = "DELETE FROM Event WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, eventId);
-            stmt.executeUpdate();
+            stmt.executeUpdate();  // Exécute la suppression
+        } catch (SQLException e) {
+            throw e;  // Lance l'exception à l'extérieur pour la gestion des erreurs dans le contrôleur
         }
     }
+
 }
