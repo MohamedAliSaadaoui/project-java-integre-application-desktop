@@ -60,5 +60,18 @@ import java.time.LocalDate;
 
         public int getCreatorId() { return creatorId; }
         public void setCreatorId(int creatorId) { this.creatorId = creatorId; }
+
+        public String toString() {
+            return "Event{" +
+                    "id=" + id +
+                    ", titre='" + titre + '\'' +
+                    ", dateDebut=" + dateDebut +
+                    ", dateFin=" + dateFin +
+                    ", lieu='" + lieu + '\'' +
+                    ", statut='" + statut + '\'' +
+                    ", categorie='" + categorie + '\'' +
+                    ", creatorId=" + creatorId +
+                    '}';
+        }
     }
 

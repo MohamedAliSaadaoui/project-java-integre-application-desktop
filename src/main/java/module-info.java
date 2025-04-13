@@ -7,6 +7,8 @@ module rewear {
     opens com.example.rewear to javafx.fxml;
     opens com.example.rewear.Gestionevent to javafx.fxml;
     opens com.example.rewear.Gestionevent.Controller to javafx.fxml;
+    opens com.example.rewear.Gestionevent.Entity to javafx.base;
+
 
     exports com.example.rewear;
     exports com.example.rewear.Gestionevent;

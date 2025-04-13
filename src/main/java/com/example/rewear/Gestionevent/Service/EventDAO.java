@@ -55,6 +55,8 @@ public class EventDAO {
                         rs.getString("categorie"),
                         rs.getInt("creator_id")
                 );
+
+
                 events.add(event);
             }
         }
