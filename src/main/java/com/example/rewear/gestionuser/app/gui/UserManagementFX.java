@@ -1,8 +1,7 @@
-package gui;
-import entities.User;
-import services.UserService;
+package com.example.rewear.gestionuser.app.gui;
+import com.example.rewear.gestionuser.app.entities.User;
+import com.example.rewear.gestionuser.app.services.UserService;
 
-import entities.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import services.UserService;
 
 import java.sql.SQLException;
 import java.text.ParseException;

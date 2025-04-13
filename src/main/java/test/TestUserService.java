@@ -1,6 +1,6 @@
 package test;
-import entities.User;
-import services.UserService;
+import com.example.rewear.gestionuser.app.entities.User;
+import com.example.rewear.gestionuser.app.services.UserService;
 
 import java.sql.SQLException;
 import java.util.Date;

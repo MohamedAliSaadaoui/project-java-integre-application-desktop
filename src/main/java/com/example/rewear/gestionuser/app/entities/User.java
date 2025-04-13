@@ -1,4 +1,4 @@
-package entities;
+package com.example.rewear.gestionuser.app.entities;
 import java.util.Date;
 
 public class User {

@@ -1,4 +1,4 @@
-package services;
+package com.example.rewear.gestionuser.app.services;
 import java.sql.SQLException;
 import java.util.List;
 

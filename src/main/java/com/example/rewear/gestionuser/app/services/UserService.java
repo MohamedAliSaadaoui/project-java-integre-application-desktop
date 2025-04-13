@@ -1,5 +1,5 @@
-package services;
-import entities.User;
+package com.example.rewear.gestionuser.app.services;
+import com.example.rewear.gestionuser.app.entities.User;
 
 import java.sql.*;
 import java.util.ArrayList;

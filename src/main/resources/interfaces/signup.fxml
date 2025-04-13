@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.rewear.gestionuser.app.controllers.Login">
+            fx:controller="com.example.rewear.gestionuser.app.controllers.SignUp">
 
     <center>
         <VBox alignment="CENTER" spacing="15.0">
@@ -13,19 +13,14 @@
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
-            <Label text="Connexion" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Label text="Inscription" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
+            <!-- Champs de formulaire -->
             <TextField fx:id="emailField" promptText="Adresse e-mail" prefWidth="250"/>
             <PasswordField fx:id="passwordField" promptText="Mot de passe" prefWidth="250"/>
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" prefWidth="250"/>
 
-            <!-- Bouton de connexion -->
-            <Button fx:id="loginButton" text="Se connecter" prefWidth="150" onAction="#handleLogin"/>
-
-            <!-- Bouton d'inscription -->
-            <Button fx:id="signUpButton" text="Sign Up" onAction="#handleSignUp" />
-
-            <!-- Lien pour mot de passe oublié -->
-            <Hyperlink fx:id="forgotPasswordLink" text="Mot de passe oublié ?" />
+            <Button fx:id="signUpButton" text="S'inscrire" prefWidth="150" onAction="#handleSignUp"/>
         </VBox>
     </center>
 
