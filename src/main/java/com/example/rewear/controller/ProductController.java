@@ -2,9 +2,13 @@ package com.example.rewear.controller;
 
 import com.example.rewear.dao.ProductDAO;
 import com.example.rewear.model.Product;
+import com.example.rewear.controller.ProductDialogController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,10 +17,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import com.example.rewear.util.SVGLoader;
+import java.io.IOException;
+import javafx.stage.Stage;
 
 public class ProductController extends BaseController {
     private final ProductDAO productDAO = new ProductDAO();
-    private ObservableList<Product> products = FXCollections.observableArrayList();
+    private final ObservableList<Product> products = FXCollections.observableArrayList();
 
     @FXML private GridPane productsGrid;
     @FXML private TextField searchField;
@@ -26,6 +32,9 @@ public class ProductController extends BaseController {
     @FXML private Button wishlistButton;
     @FXML private Button ordersButton;
     @FXML private Button logoutButton;
+    @FXML private Button addButton;
+    @FXML private Button editButton;
+    @FXML private Button deleteButton;
 
     @FXML
     public void initialize() {
@@ -73,11 +82,11 @@ public class ProductController extends BaseController {
         imageView.getStyleClass().add("product-image");
 
         // Product Title
-        Label titleLabel = new Label(product.getObjetAVendre()); // Using existing method
+        Label titleLabel = new Label(product.getObjetAVendre());
         titleLabel.getStyleClass().add("product-title");
         titleLabel.setWrapText(true);
 
-        // Description (instead of Brand since we don't have brand in the model)
+        // Description
         Label descLabel = new Label(product.getDescription());
         descLabel.getStyleClass().add("product-brand");
 
@@ -120,9 +129,53 @@ public class ProductController extends BaseController {
     }
 
     private void setupEventHandlers() {
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterProducts(newVal));
+        addButton.setOnAction(event -> showProductDialog(null));
+        editButton.setOnAction(event -> {
+            Product selectedProduct = productsGrid.getChildren().stream()
+                .filter(node -> node instanceof VBox)
+                .map(node -> (VBox) node)
+                .filter(vbox -> vbox.getUserData() instanceof Product)
+                .map(vbox -> (Product) vbox.getUserData())
+                .findFirst()
+                .orElse(null);
+
+            if (selectedProduct != null) {
+                showProductDialog(selectedProduct);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a product to edit");
+                alert.showAndWait();
+            }
+        });
+        deleteButton.setOnAction(event -> {
+            Product selectedProduct = productsGrid.getChildren().stream()
+                .filter(node -> node instanceof VBox)
+                .map(node -> (VBox) node)
+                .filter(vbox -> vbox.getUserData() instanceof Product)
+                .map(vbox -> (Product) vbox.getUserData())
+                .findFirst()
+                .orElse(null);
+
+            if (selectedProduct != null) {
+                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this product?");
+                confirmDialog.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        try {
+                            productDAO.deleteProduct(selectedProduct.getId());
+                            loadProducts();
+                        } catch (Exception e) {
+                            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Error deleting product: " + e.getMessage());
+                            errorAlert.showAndWait();
+                        }
+                    }
+                });
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select a product to delete");
+                alert.showAndWait();
+            }
+        });
+        cartButton.setOnAction(event -> navigateToCart());
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> filterProducts(newValue));
         
-        cartButton.setOnAction(e -> showCart());
         wishlistButton.setOnAction(e -> showWishlist());
         ordersButton.setOnAction(e -> showOrders());
         logoutButton.setOnAction(e -> handleLogout());
@@ -196,5 +249,36 @@ public class ProductController extends BaseController {
 
     private void handleSearch() {
         filterProducts(searchField.getText());
+    }
+
+    private void navigateToCart() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/views/cart-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) cartButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error loading cart view");
+            alert.showAndWait();
+        }
+    }
+
+    private void showProductDialog(Product product) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/views/product-dialog.fxml"));
+            Parent root = loader.load();
+            ProductDialogController controller = loader.getController();
+            controller.setProduct(product);
+            
+            Stage stage = new Stage();
+            stage.setTitle(product == null ? "Add Product" : "Edit Product");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+            
+            loadProducts(); // Refresh the table after dialog closes
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to load product dialog");
+        }
     }
 } 

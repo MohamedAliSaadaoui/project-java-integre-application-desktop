@@ -133,4 +133,16 @@
 
 .rating {
     -fx-text-fill: #ffd700;
+}
+
+.admin-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-padding: 8 16;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.admin-button:hover {
+    -fx-background-color: #45a049;
 } 

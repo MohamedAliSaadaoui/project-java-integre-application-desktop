@@ -11,8 +11,8 @@ public class Product {
     private final StringProperty objetAVendre = new SimpleStringProperty();
     private final StringProperty description = new SimpleStringProperty();
     private final StringProperty genre = new SimpleStringProperty();
-    private final StringProperty etat = new SimpleStringProperty();
     private final StringProperty taille = new SimpleStringProperty();
+    private final StringProperty etat = new SimpleStringProperty();
     private final StringProperty couleur = new SimpleStringProperty();
     private final DoubleProperty prixDeVente = new SimpleDoubleProperty();
     private final DoubleProperty prixOriginal = new SimpleDoubleProperty();
@@ -23,6 +23,20 @@ public class Product {
     private final StringProperty ville = new SimpleStringProperty();
     private final StringProperty photo = new SimpleStringProperty();
     private final ObservableList<Command> commands = FXCollections.observableArrayList();
+
+    public Product() {
+    }
+
+    public Product(int id, String objetAVendre, String description, double prixDeVente, String genre, String taille, String etat, String photo) {
+        this.id.set(id);
+        this.objetAVendre.set(objetAVendre);
+        this.description.set(description);
+        this.prixDeVente.set(prixDeVente);
+        this.genre.set(genre);
+        this.taille.set(taille);
+        this.etat.set(etat);
+        this.photo.set(photo);
+    }
 
     // Getters and Setters
     public int getId() { return id.get(); }
@@ -41,25 +55,25 @@ public class Product {
     public StringProperty descriptionProperty() { return description; }
     public void setDescription(String value) { this.description.set(value); }
 
+    public double getPrixDeVente() { return prixDeVente.get(); }
+    public DoubleProperty prixDeVenteProperty() { return prixDeVente; }
+    public void setPrixDeVente(double value) { this.prixDeVente.set(value); }
+
     public String getGenre() { return genre.get(); }
     public StringProperty genreProperty() { return genre; }
     public void setGenre(String value) { this.genre.set(value); }
-
-    public String getEtat() { return etat.get(); }
-    public StringProperty etatProperty() { return etat; }
-    public void setEtat(String value) { this.etat.set(value); }
 
     public String getTaille() { return taille.get(); }
     public StringProperty tailleProperty() { return taille; }
     public void setTaille(String value) { this.taille.set(value); }
 
+    public String getEtat() { return etat.get(); }
+    public StringProperty etatProperty() { return etat; }
+    public void setEtat(String value) { this.etat.set(value); }
+
     public String getCouleur() { return couleur.get(); }
     public StringProperty couleurProperty() { return couleur; }
     public void setCouleur(String value) { this.couleur.set(value); }
-
-    public double getPrixDeVente() { return prixDeVente.get(); }
-    public DoubleProperty prixDeVenteProperty() { return prixDeVente; }
-    public void setPrixDeVente(double value) { this.prixDeVente.set(value); }
 
     public double getPrixOriginal() { return prixOriginal.get(); }
     public DoubleProperty prixOriginalProperty() { return prixOriginal; }

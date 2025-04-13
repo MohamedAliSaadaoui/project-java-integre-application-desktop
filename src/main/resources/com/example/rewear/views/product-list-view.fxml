@@ -80,24 +80,15 @@
         </Button>
     </HBox>
 
-    <!-- Categories Section -->
-    <ScrollPane fitToWidth="true" styleClass="categories-scroll">
-        <content>
-            <HBox spacing="10" styleClass="categories-container">
-                <padding>
-                    <Insets bottom="10" left="20" right="20" top="10" />
-                </padding>
-                <Button styleClass="category-button" text="All" />
-                <Button styleClass="category-button" text="Electronics" />
-                <Button styleClass="category-button" text="Furniture" />
-                <Button styleClass="category-button" text="Books" />
-                <Button styleClass="category-button" text="Clothing" />
-                <Button styleClass="category-button" text="Beauty" />
-                <Button styleClass="category-button" text="Toys" />
-                <Button styleClass="category-button" text="Sports" />
-            </HBox>
-        </content>
-    </ScrollPane>
+    <!-- Admin Controls Section -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <padding>
+            <Insets bottom="10" left="20" right="20" top="10" />
+        </padding>
+        <Button fx:id="addButton" text="Add Product" styleClass="admin-button" />
+        <Button fx:id="editButton" text="Edit Product" styleClass="admin-button" />
+        <Button fx:id="deleteButton" text="Delete Product" styleClass="admin-button" />
+    </HBox>
 
     <!-- Products Grid -->
     <ScrollPane fitToWidth="true" styleClass="products-scroll" VBox.vgrow="ALWAYS">
