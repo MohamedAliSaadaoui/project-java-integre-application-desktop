@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import com.example.rewear.util.SVGLoader;
 
 public class ProductController extends BaseController {
     private final ProductDAO productDAO = new ProductDAO();
@@ -31,6 +32,7 @@ public class ProductController extends BaseController {
         setupWelcomeMessage();
         loadProducts();
         setupEventHandlers();
+        setupIcons();
     }
 
     private void setupWelcomeMessage() {
@@ -170,5 +172,29 @@ public class ProductController extends BaseController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    private void setupIcons() {
+        // Load SVG icons for buttons
+        cartButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/cart-icon.svg", 20, 20));
+        wishlistButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/heart-icon.svg", 20, 20));
+        ordersButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/order-icon.svg", 20, 20));
+        logoutButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/logout-icon.svg", 20, 20));
+        
+        // Create and set up search button if not already in FXML
+        Button searchButton = new Button();
+        searchButton.setGraphic(SVGLoader.loadSvg("/com/example/rewear/images/search-icon.svg", 20, 20));
+        searchButton.getStyleClass().add("search-button");
+        searchButton.setOnAction(e -> handleSearch());
+        
+        // Add search button to the search field's parent HBox
+        HBox searchContainer = (HBox) searchField.getParent();
+        if (!searchContainer.getChildren().contains(searchButton)) {
+            searchContainer.getChildren().add(searchButton);
+        }
+    }
+
+    private void handleSearch() {
+        filterProducts(searchField.getText());
     }
 } 

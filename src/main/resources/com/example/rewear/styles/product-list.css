@@ -21,19 +21,44 @@
     -fx-text-fill: #666666;
     -fx-font-size: 14px;
     -fx-cursor: hand;
+    -fx-padding: 8 12;
+    -fx-alignment: center;
 }
 
 .nav-button:hover {
     -fx-text-fill: #ff6b6b;
 }
 
+.nav-button .image-view {
+    -fx-opacity: 0.6;
+}
+
+.nav-button:hover .image-view {
+    -fx-opacity: 1;
+}
+
 .search-field {
     -fx-background-color: white;
-    -fx-background-radius: 20;
+    -fx-background-radius: 20 0 0 20;
     -fx-padding: 8 16;
     -fx-font-size: 14px;
     -fx-prompt-text-fill: #999999;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+}
+
+.search-button {
+    -fx-background-color: #ff6b6b;
+    -fx-background-radius: 0 20 20 0;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: #ff5252;
+}
+
+.search-button .image-view {
+    -fx-opacity: 1;
 }
 
 .categories-scroll {

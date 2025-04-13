@@ -10,7 +10,7 @@ public class ProductDAO {
     
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products";
+        String query = "SELECT * FROM product";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
@@ -27,7 +27,7 @@ public class ProductDAO {
     }
 
     public Product getProductById(int id) {
-        String query = "SELECT * FROM products WHERE id = ?";
+        String query = "SELECT * FROM product WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
@@ -45,7 +45,7 @@ public class ProductDAO {
 
     public List<Product> getProductsByUserId(int userId) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products WHERE user_id = ?";
+        String query = "SELECT * FROM product WHERE user_id = ?";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -64,7 +64,7 @@ public class ProductDAO {
     }
 
     public boolean addProduct(Product product) {
-        String query = "INSERT INTO products (user_id, objet_a_vendre, description, genre, etat, " +
+        String query = "INSERT INTO product (user_id, objet_avendre, description, genre, etat, " +
                       "taille, couleur, prix_de_vente, prix_original, telephone, email, adresse, " +
                       "code_postal, ville, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
@@ -89,7 +89,7 @@ public class ProductDAO {
     }
 
     public boolean updateProduct(Product product) {
-        String query = "UPDATE products SET objet_a_vendre = ?, description = ?, genre = ?, " +
+        String query = "UPDATE product SET objet_a_vendre = ?, description = ?, genre = ?, " +
                       "etat = ?, taille = ?, couleur = ?, prix_de_vente = ?, prix_original = ?, " +
                       "telephone = ?, email = ?, adresse = ?, code_postal = ?, ville = ?, photo = ? " +
                       "WHERE id = ?";
@@ -108,7 +108,7 @@ public class ProductDAO {
     }
 
     public boolean deleteProduct(int id) {
-        String query = "DELETE FROM products WHERE id = ?";
+        String query = "DELETE FROM product WHERE id = ?";
         
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -125,7 +125,7 @@ public class ProductDAO {
         Product product = new Product();
         product.setId(rs.getInt("id"));
         product.setUserId(rs.getInt("user_id"));
-        product.setObjetAVendre(rs.getString("objet_a_vendre"));
+        product.setObjetAVendre(rs.getString("objet_avendre"));
         product.setDescription(rs.getString("description"));
         product.setGenre(rs.getString("genre"));
         product.setEtat(rs.getString("etat"));
