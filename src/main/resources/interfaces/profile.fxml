@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.rewear.gestionuser.app.controllers.Profile"
+           style="-fx-background-color: linear-gradient(to right, #c9ffbf, #ffafbd);">
+
+    <VBox spacing="15" alignment="CENTER"
+          style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+          maxWidth="400">
+
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <Label text="Mon Profil"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+        <!-- Affichage des informations personnelles -->
+        <Label text="Nom d'utilisateur:"/>
+        <Label fx:id="usernameLabel" style="-fx-font-size: 14px;"/>
+
+        <Label text="Email:"/>
+        <Label fx:id="emailLabel" style="-fx-font-size: 14px;"/>
+
+        <Label text="Numéro de téléphone:"/>
+        <Label fx:id="phoneLabel" style="-fx-font-size: 14px;"/>
+
+        <Label text="Date de naissance:"/>
+        <Label fx:id="birthDateLabel" style="-fx-font-size: 14px;"/>
+
+        <Label text="Adresse:"/>
+        <Label fx:id="addressLabel" style="-fx-font-size: 14px;"/>
+
+        <!-- Boutons -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="editButton" text="Modifier" onAction="#handleEdit" style="-fx-background-color: #ff7e5f; -fx-text-fill: white; -fx-background-radius: 20;"/>
+            <Button fx:id="deleteButton" text="Supprimer" onAction="#handleDelete" style="-fx-background-color: #ff7e5f; -fx-text-fill: white; -fx-background-radius: 20;"/>
+        </HBox>
+
+        <!-- Déconnexion -->
+        <Button fx:id="logoutButton" text="Se déconnecter" onAction="#handleLogout" style="-fx-background-color: #2575fc; -fx-text-fill: white; -fx-background-radius: 20;"/>
+    </VBox>
+</StackPane>

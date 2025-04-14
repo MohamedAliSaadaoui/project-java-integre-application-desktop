@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.rewear.gestionuser.app.controllers.EditProfile"
+           style="-fx-background-color: linear-gradient(to right, #c9ffbf, #ffafbd);">
+    <VBox spacing="15" alignment="CENTER"
+          style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+          maxWidth="400">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <Label text="Modifier mon profil"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+        <Label text="Nom d'utilisateur:"/>
+        <TextField fx:id="usernameField" promptText="Nom d'utilisateur"/>
+
+        <Label text="Email:"/>
+        <TextField fx:id="emailField" promptText="Email"/>
+
+        <Label text="Numéro de téléphone:"/>
+        <TextField fx:id="phoneField" promptText="Numéro de téléphone"/>
+
+        <Label text="Date de naissance:"/>
+        <DatePicker fx:id="birthDatePicker"/>
+
+        <Label text="Adresse:"/>
+        <TextField fx:id="addressField" promptText="Adresse"/>
+
+        <!-- Boutons -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave"
+                    style="-fx-background-color: #ff7e5f; -fx-text-fill: white; -fx-background-radius: 20;"/>
+            <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel"
+                    style="-fx-background-color: #2575fc; -fx-text-fill: white; -fx-background-radius: 20;"/>
+        </HBox>
+    </VBox>
+</StackPane>

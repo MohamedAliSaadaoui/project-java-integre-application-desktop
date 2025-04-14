@@ -2,30 +2,29 @@ package com.example.rewear.gestionuser.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private static Stage primaryStage;
-
     @Override
-    public void start(Stage stage) throws Exception {
-        primaryStage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/interfaces/login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
-        stage.setScene(scene);
-        stage.setTitle("Connexion");
-        stage.show();
-    }
+    public void start(Stage primaryStage) throws Exception {
+        // Charger le fichier FXML de la scène de login
+        Parent loginRoot = FXMLLoader.load(getClass().getResource("/interfaces/login.fxml"));
 
-    public static void changeScene(String fxmlFile) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/interfaces/" + fxmlFile));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
-        primaryStage.setScene(scene);
+        // Créer la scène avec le root de la page de login
+        Scene loginScene = new Scene(loginRoot);
+
+        // Définir la scène principale et le titre
+        primaryStage.setScene(loginScene);
+        primaryStage.setTitle("Login - Rewear");
+
+        // Afficher la fenêtre principale
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch(); // Démarre JavaFX
+        launch(args);
     }
 }

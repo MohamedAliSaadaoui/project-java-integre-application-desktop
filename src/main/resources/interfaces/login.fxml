@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.rewear.gestionuser.app.controllers.Login">
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.rewear.gestionuser.app.controllers.Login"
+           style="-fx-background-color: linear-gradient(to bottom, #a8edea, #fed6e3);">
 
-    <center>
-        <VBox alignment="CENTER" spacing="15.0">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+    <VBox spacing="10" alignment="CENTER"
+          style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+          maxWidth="350">
 
-            <Label text="Connexion" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
 
-            <TextField fx:id="emailField" promptText="Adresse e-mail" prefWidth="250"/>
-            <PasswordField fx:id="passwordField" promptText="Mot de passe" prefWidth="250"/>
+        <Label text="Connexion"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-            <!-- Bouton de connexion -->
-            <Button fx:id="loginButton" text="Se connecter" prefWidth="150" onAction="#handleLogin"/>
+        <TextField fx:id="emailField"
+                   promptText="Adresse e-mail"
+                   prefWidth="250"/>
 
-            <!-- Bouton d'inscription -->
-            <Button fx:id="signUpButton" text="Sign Up" onAction="#handleSignUp" />
+        <PasswordField fx:id="passwordField"
+                       promptText="Mot de passe"
+                       prefWidth="250"/>
 
-            <!-- Lien pour mot de passe oublié -->
-            <Hyperlink fx:id="forgotPasswordLink" text="Mot de passe oublié ?" />
-        </VBox>
-    </center>
+        <Button fx:id="loginButton"
+                text="Se connecter"
+                prefWidth="150"
+                style="-fx-background-color: #6a11cb; -fx-text-fill: white; -fx-background-radius: 20;"
+                onAction="#handleLogin"/>
 
-</BorderPane>
+        <Button fx:id="signUpButton"
+                text="Créer un compte"
+                prefWidth="150"
+                style="-fx-background-color: #2575fc; -fx-text-fill: white; -fx-background-radius: 20;"
+                onAction="#handleSignUp"/>
+
+        <Hyperlink fx:id="forgotPasswordLink"
+                   text="Mot de passe oublié ?"
+                   style="-fx-text-fill: #555;"/>
+
+    </VBox>
+</StackPane>

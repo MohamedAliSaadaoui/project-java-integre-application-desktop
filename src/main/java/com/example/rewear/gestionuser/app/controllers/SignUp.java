@@ -1,54 +1,123 @@
 package com.example.rewear.gestionuser.app.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.scene.Node;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SignUp {
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Driver MySQL chargé avec succès");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Erreur: Driver MySQL non trouvé");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML private TextField usernameField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private TextField phoneField;
+    @FXML private DatePicker birthDatePicker;
+    @FXML private TextField addressField;
+    @FXML private Label photoPathLabel;
+    @FXML private Button uploadButton;
+
+    private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/rewear_db";
+    private final String DB_USER = "root";
+    private final String DB_PASSWORD = "";
+
+    private String photoPath;
 
     @FXML
-    private TextField emailField;
+    private void handleSignUp(ActionEvent event) {
+        if (!testDatabaseConnection()) {
+            showAlert("Erreur", "Impossible de se connecter à la base de données.", Alert.AlertType.ERROR);
+            return;
+        }
 
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private PasswordField confirmPasswordField;
-
-    @FXML
-    private void handleSignUp() {
+        String username = usernameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
+        String phone = phoneField.getText();
+        String address = addressField.getText();
+        String birthDate = (birthDatePicker.getValue() != null) ? birthDatePicker.getValue().toString() : "";
 
-        // Validation des champs
-        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            showAlert("Erreur", "Tous les champs doivent être remplis.", AlertType.ERROR);
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            showAlert("Erreur", "Tous les champs doivent être remplis.", Alert.AlertType.ERROR);
             return;
         }
 
-        // Validation de l'email
-        if (!email.contains("@")) {
-            showAlert("Erreur", "L'email n'est pas valide.", AlertType.ERROR);
-            return;
-        }
-
-        // Validation du mot de passe
         if (!password.equals(confirmPassword)) {
-            showAlert("Erreur", "Les mots de passe ne correspondent pas.", AlertType.ERROR);
+            showAlert("Erreur", "Les mots de passe ne correspondent pas.", Alert.AlertType.ERROR);
             return;
         }
 
-        // Enregistrer l'utilisateur (logique à ajouter, par exemple dans une base de données)
-        System.out.println("Utilisateur inscrit : " + email);
+        if (email.isEmpty() || phone.isEmpty() || address.isEmpty() || birthDate.isEmpty()) {
+            showAlert("Erreur", "Tous les champs obligatoires doivent être remplis.", Alert.AlertType.ERROR);
+            return;
+        }
 
-        // Rediriger vers la page de connexion après une inscription réussie
-        redirectToLogin();
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String sql = "INSERT INTO user (username, password, email, num_tel, date_naiss, adresse, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, email);
+            stmt.setString(4, phone);
+            stmt.setString(5, birthDate);
+            stmt.setString(6, address);
+            stmt.setString(7, photoPath);
+
+            int rowsAffected = stmt.executeUpdate();
+            System.out.println("Nombre de lignes affectées: " + rowsAffected);
+
+            if (rowsAffected > 0) {
+                showAlert("Succès", "Inscription réussie !", Alert.AlertType.INFORMATION);
+                redirectToLogin(event);
+            } else {
+                showAlert("Erreur", "Aucune ligne n'a été insérée.", Alert.AlertType.ERROR);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL: " + e.getMessage());
+            showAlert("Erreur", "Erreur lors de l'enregistrement : " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
-    private void showAlert(String title, String message, AlertType type) {
+    @FXML
+    private void handleFileUpload() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
+
+        Stage stage = (Stage) uploadButton.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            photoPath = selectedFile.getAbsolutePath();
+            photoPathLabel.setText("Fichier sélectionné: " + selectedFile.getName());
+        } else {
+            photoPathLabel.setText("Aucune photo sélectionnée");
+        }
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -56,8 +125,28 @@ public class SignUp {
         alert.showAndWait();
     }
 
-    private void redirectToLogin() {
-        // Logic to redirect the user to the login page
-        System.out.println("Redirection vers la page de connexion...");
+    private void redirectToLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/Login.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger la page de connexion.", Alert.AlertType.ERROR);
+        }
+    }
+
+    private boolean testDatabaseConnection() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            System.out.println("Connexion à la base de données réussie!");
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Erreur de connexion: " + e.getMessage());
+            return false;
+        }
     }
 }

@@ -1,27 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.stage.FileChooser?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.rewear.gestionuser.app.controllers.SignUp">
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.rewear.gestionuser.app.controllers.SignUp"
+           style="-fx-background-color: linear-gradient(to right, #ffecd2, #fcb69f);">
 
-    <center>
-        <VBox alignment="CENTER" spacing="15.0">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+    <VBox spacing="12" alignment="CENTER"
+          maxWidth="400"
+          style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
 
-            <Label text="Inscription" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
 
-            <!-- Champs de formulaire -->
-            <TextField fx:id="emailField" promptText="Adresse e-mail" prefWidth="250"/>
-            <PasswordField fx:id="passwordField" promptText="Mot de passe" prefWidth="250"/>
-            <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" prefWidth="250"/>
+        <Label text="Créer un compte"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-            <Button fx:id="signUpButton" text="S'inscrire" prefWidth="150" onAction="#handleSignUp"/>
-        </VBox>
-    </center>
+        <!-- Champ Nom d'utilisateur -->
+        <TextField fx:id="usernameField" promptText="Nom d'utilisateur" prefWidth="300"/>
 
-</BorderPane>
+        <!-- Champ Email -->
+        <TextField fx:id="emailField" promptText="Adresse e-mail" prefWidth="300"/>
+
+        <!-- Champ Mot de passe -->
+        <PasswordField fx:id="passwordField" promptText="Mot de passe" prefWidth="300"/>
+
+        <!-- Champ Confirmer le mot de passe -->
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" prefWidth="300"/>
+
+        <!-- Champ Date de naissance -->
+        <DatePicker fx:id="birthDatePicker" promptText="Date de naissance" prefWidth="300"/>
+
+        <!-- Champ Numéro de téléphone -->
+        <TextField fx:id="phoneField" promptText="Numéro de téléphone" prefWidth="300"/>
+
+        <!-- Champ Adresse -->
+        <TextField fx:id="addressField" promptText="Adresse" prefWidth="300"/>
+
+        <!-- Photo de profil -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Photo de profil :" />
+            <Button fx:id="uploadButton" text="Choisir un fichier" onAction="#handleFileUpload" />
+            <Label fx:id="photoPathLabel" text="Aucune photo sélectionnée" style="-fx-font-size: 12px; -fx-text-fill: gray;" />
+        </HBox>
+
+        <!-- Bouton S'inscrire -->
+        <Button fx:id="signUpButton"
+                text="S'inscrire"
+                prefWidth="200"
+                onAction="#handleSignUp"
+                style="-fx-background-color: #ff7e5f; -fx-text-fill: white; -fx-background-radius: 20;" />
+    </VBox>
+</StackPane>
