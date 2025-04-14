@@ -398,6 +398,31 @@ public class ListEvent implements Initializable {
         }
     }
     /**
+     * Gère l'action du bouton "Voir mes participations"
+     */
+    @FXML
+    private void handleViewParticipations(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/Gestionevent/ListParticipe .fxml"));
+            Parent root = loader.load();
+
+            // Récupérer le contrôleur et lui passer l'ID de l'utilisateur connecté
+            ListParticipe controller = loader.getController();
+            controller.setUserId(this.currentUserId); // Corrigé: Utilisation de currentUserId au lieu de userId
+
+            Stage stage = new Stage();
+            stage.setTitle("Mes Participations");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Rend la fenêtre modale
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir la liste des participations: " + e.getMessage());
+        }
+    }
+    /**
      * Affiche une alerte
      */
     private void showAlert(Alert.AlertType type, String title, String content) {

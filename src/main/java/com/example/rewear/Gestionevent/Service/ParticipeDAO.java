@@ -390,4 +390,51 @@ public class ParticipeDAO {
         participe.setDateParticipation(resultSet.getDate("date_participation").toLocalDate());
         return participe;
     }
+    // Méthode pour modifier une participation existante
+    public boolean modifier(Participe participe) {
+        Connection conn = null;
+        PreparedStatement statement = null;
+
+        try {
+            // Utiliser la connexion injectée si disponible, sinon obtenir une nouvelle connexion
+            conn = this.connection != null ? this.connection : DBUtil.getConnection();
+
+            // Vérifier si la date est valide (entre date_debut et date_fin de l'événement)
+            if (!dateEstValide(participe.getId_event_id(), participe.getDateParticipation())) {
+                System.out.println("Date de participation invalide");
+                return false;
+            }
+
+            // Préparation de la requête de mise à jour
+            String updateQuery = "UPDATE Participe SET date_participation = ? WHERE id = ? AND id_event_id = ? AND user_id = ?";
+            statement = conn.prepareStatement(updateQuery);
+            statement.setDate(1, Date.valueOf(participe.getDateParticipation()));
+            statement.setLong(2, participe.getId());
+            statement.setLong(3, participe.getId_event_id());
+            statement.setLong(4, participe.getUser_id());
+
+            // Exécution de la requête
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Participation modifiée avec succès. ID: " + participe.getId());
+                return true;
+            } else {
+                System.out.println("Aucune participation n'a été modifiée.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la modification de la participation: " + e.getMessage());
+            return false;
+        } finally {
+            // Fermer les ressources
+            try {
+                if (statement != null) statement.close();
+                if (conn != null && this.connection == null) conn.close(); // Ne ferme la connexion que si elle a été créée localement
+            } catch (SQLException e) {
+                System.err.println("Erreur lors de la fermeture des ressources: " + e.getMessage());
+            }
+        }
+    }
 }

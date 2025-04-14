@@ -37,7 +37,7 @@
         </TableView>
     </center>
     <bottom>
-        <VBox alignment="CENTER" prefHeight="60.0" spacing="10.0" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" prefHeight="80.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
                 <HBox alignment="CENTER" spacing="20.0">
                     <children>
@@ -47,6 +47,15 @@
                         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" prefHeight="30.0" prefWidth="120.0" text="Supprimer" />
                         <Button fx:id="addParticipantButton" mnemonicParsing="false" onAction="#handleAddParticipant" prefHeight="30.0" prefWidth="160.0" text="Participer" />
                     </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <Button fx:id="viewParticipationsButton" mnemonicParsing="false" onAction="#handleViewParticipations" prefHeight="30.0" prefWidth="240.0"
+                                style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Voir mes participations" />
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" />
+                    </padding>
                 </HBox>
             </children>
             <padding>
