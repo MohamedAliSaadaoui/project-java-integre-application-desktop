@@ -76,7 +76,7 @@ public class ParticipeDAO {
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        participe.setId((int)generatedKeys.getLong(1));
+                        participe.setId((int) generatedKeys.getLong(1));
                         System.out.println("Participation ajoutée avec succès. ID: " + participe.getId());
                         return true;
                     }
@@ -91,7 +91,8 @@ public class ParticipeDAO {
             // Fermer les ressources
             try {
                 if (statement != null) statement.close();
-                if (conn != null && this.connection == null) conn.close(); // Ne ferme la connexion que si elle a été créée localement
+                if (conn != null && this.connection == null)
+                    conn.close(); // Ne ferme la connexion que si elle a été créée localement
             } catch (SQLException e) {
                 System.err.println("Erreur lors de la fermeture des ressources: " + e.getMessage());
             }
@@ -384,12 +385,13 @@ public class ParticipeDAO {
     // Méthode pour extraire une participation d'un ResultSet
     private Participe extraireParticipation(ResultSet resultSet) throws SQLException {
         Participe participe = new Participe();
-        participe.setId((int)resultSet.getLong("id"));
+        participe.setId((int) resultSet.getLong("id"));
         participe.setId_event_id(resultSet.getLong("id_event_id"));
         participe.setUser_id(resultSet.getLong("user_id"));
         participe.setDateParticipation(resultSet.getDate("date_participation").toLocalDate());
         return participe;
     }
+
     // Méthode pour modifier une participation existante
     public boolean modifier(Participe participe) {
         Connection conn = null;
@@ -431,7 +433,65 @@ public class ParticipeDAO {
             // Fermer les ressources
             try {
                 if (statement != null) statement.close();
-                if (conn != null && this.connection == null) conn.close(); // Ne ferme la connexion que si elle a été créée localement
+                if (conn != null && this.connection == null)
+                    conn.close(); // Ne ferme la connexion que si elle a été créée localement
+            } catch (SQLException e) {
+                System.err.println("Erreur lors de la fermeture des ressources: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Modifie une participation existante dans la base de données
+     *
+     * @param participation L'objet Participe contenant les données mises à jour
+     * @return true si la modification a réussi, false sinon
+     */
+    public boolean modifierParticipation(Participe participation) {
+        Connection conn = null;
+        PreparedStatement statement = null;
+
+        try {
+            // Utiliser la connexion injectée si disponible, sinon obtenir une nouvelle connexion
+            conn = this.connection != null ? this.connection : DBUtil.getConnection();
+
+            // Vérifier si la date est valide (entre dateDebut et dateFin de l'événement)
+            if (!dateEstValide(participation.getId_event_id(), participation.getDateParticipation())) {
+                System.out.println("Date de participation invalide");
+                return false;
+            }
+
+            // Préparation de la requête
+            String query = "UPDATE Participe SET date_participation = ? WHERE id = ?";
+            statement = conn.prepareStatement(query);
+
+            // Convertir LocalDate en java.sql.Date
+            java.sql.Date sqlDate = java.sql.Date.valueOf(participation.getDateParticipation());
+
+            statement.setDate(1, sqlDate);
+            statement.setLong(2, participation.getId());
+
+            // Exécution de la requête
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Participation modifiée avec succès. ID: " + participation.getId());
+                return true;
+            } else {
+                System.out.println("Aucune participation n'a été modifiée.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la modification de la participation: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            // Fermer les ressources
+            try {
+                if (statement != null) statement.close();
+                if (conn != null && this.connection == null)
+                    conn.close(); // Ne ferme la connexion que si elle a été créée localement
             } catch (SQLException e) {
                 System.err.println("Erreur lors de la fermeture des ressources: " + e.getMessage());
             }

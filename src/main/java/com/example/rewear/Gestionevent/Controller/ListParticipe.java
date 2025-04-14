@@ -183,7 +183,7 @@ public class ListParticipe implements Initializable {
      */
     public void ouvrirFormulaireModification(Participe participation, Event evenement) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/Gestionevent/ModifierParticipe.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/Gestionevent/UpdadteParticipe.fxml"));
             Parent root = loader.load();
 
             UpdateParticipe controller = loader.getController();
