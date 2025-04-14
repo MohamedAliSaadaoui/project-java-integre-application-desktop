@@ -1,5 +1,6 @@
 package com.example.rewear.gestionuser.app.controllers;
 
+import com.example.rewear.utils.PasswordUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,6 +60,7 @@ public class SignUp {
         String address = addressField.getText();
         String birthDate = (birthDatePicker.getValue() != null) ? birthDatePicker.getValue().toString() : "";
 
+        // Validation des champs
         if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showAlert("Erreur", "Tous les champs doivent être remplis.", Alert.AlertType.ERROR);
             return;
@@ -69,16 +71,25 @@ public class SignUp {
             return;
         }
 
+        // Vérifier la longueur minimale du mot de passe
+        if (password.length() < 6) {
+            showAlert("Erreur", "Le mot de passe doit contenir au moins 6 caractères.", Alert.AlertType.ERROR);
+            return;
+        }
+
         if (email.isEmpty() || phone.isEmpty() || address.isEmpty() || birthDate.isEmpty()) {
             showAlert("Erreur", "Tous les champs obligatoires doivent être remplis.", Alert.AlertType.ERROR);
             return;
         }
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            // Hasher le mot de passe avant de l'enregistrer
+            String hashedPassword = PasswordUtils.hashPassword(password);
+
             String sql = "INSERT INTO user (username, password, email, num_tel, date_naiss, adresse, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
-            stmt.setString(2, password);
+            stmt.setString(2, hashedPassword); // Utiliser le mot de passe haché
             stmt.setString(3, email);
             stmt.setString(4, phone);
             stmt.setString(5, birthDate);

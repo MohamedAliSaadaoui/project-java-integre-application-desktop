@@ -1,5 +1,6 @@
 package com.example.rewear.gestionuser.app.controllers;
 
+import com.example.rewear.utils.PasswordUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Optional;
 
 public class Profile {
 
@@ -28,12 +30,15 @@ public class Profile {
     private Button deleteButton;
     @FXML
     private Button logoutButton;
+    @FXML
+    private Button changePasswordButton; // Assurez-vous d'ajouter ce bouton dans votre FXML
 
     private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/rewear_db";
     private final String DB_USER = "root";
     private final String DB_PASSWORD = "";
 
     private int userId; // L'ID de l'utilisateur connecté
+    private String userEmail; // Email de l'utilisateur
 
     public void initialize() {
         try {
@@ -74,6 +79,7 @@ public class Profile {
                 phoneLabel.setText("123-456-7890");
                 birthDateLabel.setText("01/01/2000");
                 addressLabel.setText("123 Rue du Test, Ville Test");
+                userEmail = "user@example.com";
             }
             return;
         }
@@ -99,6 +105,7 @@ public class Profile {
                 phoneLabel.setText(rs.getString("num_tel"));
                 birthDateLabel.setText(rs.getString("date_naiss"));
                 addressLabel.setText(rs.getString("adresse"));
+                userEmail = rs.getString("email");
                 System.out.println("Informations utilisateur chargées avec succès");
             } else {
                 System.out.println("Aucun utilisateur trouvé avec l'ID: " + userId);
@@ -111,7 +118,7 @@ public class Profile {
         }
     }
 
-    // Modifier les informations (fonctionnalité à ajouter plus tard)
+    // Modifier les informations
     @FXML
     private void handleEdit() {
         try {
@@ -142,20 +149,128 @@ public class Profile {
             showAlert("Erreur", "Erreur lors de l'ouverture du formulaire d'édition: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
+
+    // Méthode pour changer le mot de passe (version simplifiée)
+    @FXML
+    private void handleChangePassword() {
+        // Créer une boîte de dialogue personnalisée
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Changement de mot de passe");
+        dialog.setHeaderText("Veuillez entrer votre mot de passe actuel et le nouveau mot de passe");
+
+        // Ajouter les boutons
+        ButtonType changeButtonType = new ButtonType("Changer", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(changeButtonType, ButtonType.CANCEL);
+
+        // Créer les champs de mot de passe
+        PasswordField currentPasswordField = new PasswordField();
+        currentPasswordField.setPromptText("Mot de passe actuel");
+
+        PasswordField newPasswordField = new PasswordField();
+        newPasswordField.setPromptText("Nouveau mot de passe");
+
+        PasswordField confirmPasswordField = new PasswordField();
+        confirmPasswordField.setPromptText("Confirmer le nouveau mot de passe");
+
+        // Créer la mise en page
+        javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
+        grid.add(new Label("Mot de passe actuel:"), 0, 0);
+        grid.add(currentPasswordField, 1, 0);
+        grid.add(new Label("Nouveau mot de passe:"), 0, 1);
+        grid.add(newPasswordField, 1, 1);
+        grid.add(new Label("Confirmer:"), 0, 2);
+        grid.add(confirmPasswordField, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Afficher la boîte de dialogue et attendre la réponse
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if (result.isPresent() && result.get() == changeButtonType) {
+            String currentPassword = currentPasswordField.getText();
+            String newPassword = newPasswordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
+
+            // Vérifier que les champs ne sont pas vides
+            if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                showAlert("Erreur", "Tous les champs sont obligatoires.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Vérifier que les nouveaux mots de passe correspondent
+            if (!newPassword.equals(confirmPassword)) {
+                showAlert("Erreur", "Les nouveaux mots de passe ne correspondent pas.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Vérifier que le nouveau mot de passe a au moins 6 caractères
+            if (newPassword.length() < 6) {
+                showAlert("Erreur", "Le nouveau mot de passe doit contenir au moins 6 caractères.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Vérifier le mot de passe actuel et mettre à jour le mot de passe
+            if (verifyAndUpdatePassword(currentPassword, newPassword)) {
+                showAlert("Succès", "Votre mot de passe a été mis à jour avec succès.", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur", "Le mot de passe actuel est incorrect ou une erreur est survenue.", Alert.AlertType.ERROR);
+            }
+        }
+    }
+
+    // Vérifier le mot de passe actuel et mettre à jour s'il est correct
+    private boolean verifyAndUpdatePassword(String currentPassword, String newPassword) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            // 1. Récupérer le mot de passe actuel
+            String query = "SELECT password FROM user WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+
+                // 2. Vérifier si le mot de passe actuel est correct
+                // Si le mot de passe est stocké en clair (temporairement)
+                boolean passwordMatches = storedPassword.equals(currentPassword);
+
+                // Si le mot de passe est déjà haché
+                passwordMatches = passwordMatches || PasswordUtils.comparePassword(currentPassword, storedPassword);
+
+                if (passwordMatches) {
+                    // 3. Hasher et mettre à jour le nouveau mot de passe
+                    String hashedNewPassword = PasswordUtils.hashPassword(newPassword);
+
+                    String updateQuery = "UPDATE user SET password = ? WHERE id = ?";
+                    PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
+                    updateStmt.setString(1, hashedNewPassword);
+                    updateStmt.setInt(2, userId);
+
+                    int rowsAffected = updateStmt.executeUpdate();
+                    return rowsAffected > 0;
+                }
+            }
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors du changement de mot de passe: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // Supprimer l'utilisateur
     @FXML
     private void handleDelete() {
-        // Confirmation avant suppression
+        // Afficher une alerte de confirmation
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Confirmation");
         confirmAlert.setHeaderText("Suppression de compte");
         confirmAlert.setContentText("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.");
 
-        confirmAlert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                deleteUser();
-            }
-        });
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            deleteUser();
+        }
     }
 
     // Méthode pour supprimer l'utilisateur de la base de données

@@ -1,5 +1,6 @@
 package com.example.rewear.gestionuser.app.controllers;
 
+import com.example.rewear.utils.PasswordUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
@@ -71,25 +72,26 @@ public class Login {
                         Class.forName("com.mysql.cj.jdbc.Driver");
 
                         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-                                // Afficher les colonnes disponibles dans la table user pour le débogage
-                                System.out.println("Vérification de la structure de la table user...");
-                                DatabaseMetaData metaData = conn.getMetaData();
-                                ResultSet columns = metaData.getColumns(null, null, "user", null);
-                                System.out.println("Colonnes disponibles dans la table user:");
-                                while (columns.next()) {
-                                        System.out.println(columns.getString("COLUMN_NAME"));
-                                }
-
-                                // Utiliser 'password' au lieu de 'mot_de_passe' comme nom de colonne
-                                String query = "SELECT id FROM user WHERE email = ? AND password = ?";
-
+                                // Récupérer l'utilisateur avec son mot de passe haché
+                                String query = "SELECT id, password FROM user WHERE email = ?";
                                 PreparedStatement stmt = conn.prepareStatement(query);
                                 stmt.setString(1, email);
-                                stmt.setString(2, password); // Note: en production, utilisez un hachage sécurisé
 
                                 ResultSet rs = stmt.executeQuery();
                                 if (rs.next()) {
-                                        return rs.getInt("id");
+                                        int userId = rs.getInt("id");
+                                        String storedPassword = rs.getString("password");
+
+                                        // Vérifier si le mot de passe est correct
+                                        // Si les mots de passe sont stockés en clair (temporairement)
+                                        if (storedPassword.equals(password)) {
+                                                return userId;
+                                        }
+
+                                        // Si les mots de passe sont déjà hachés
+                                        if (PasswordUtils.comparePassword(password, storedPassword)) {
+                                                return userId;
+                                        }
                                 }
                         }
                 } catch (ClassNotFoundException e) {
