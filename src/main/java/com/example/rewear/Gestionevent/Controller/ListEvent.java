@@ -1,7 +1,9 @@
 package com.example.rewear.Gestionevent.Controller;
 import com.example.rewear.DBUtil;
 import com.example.rewear.Gestionevent.Entity.Event;
+import com.example.rewear.Gestionevent.Entity.Participe;
 import com.example.rewear.Gestionevent.Service.EventDAO;
+import com.example.rewear.Gestionevent.Service.ParticipeDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,16 +14,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.net.URL;
 
 public class ListEvent implements Initializable {
     @FXML
@@ -49,6 +55,9 @@ public class ListEvent implements Initializable {
     private TableColumn<Event, String> categorieColumn;
 
     @FXML
+    private TableColumn<Event, Void> actionsColumn;
+
+    @FXML
     private Button refreshButton;
 
     @FXML
@@ -56,21 +65,30 @@ public class ListEvent implements Initializable {
 
     @FXML
     private Button editButton;
+
     @FXML
     private Button deleteButton;
 
+    @FXML
+    private Button btnMesParticipations;
+
     private ObservableList<Event> eventList = FXCollections.observableArrayList();
     private EventDAO eventDAO;
+    private ParticipeDAO participeDAO;
+    private Long currentUserId;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            // Initialiser la connexion à la base de données et le DAO
+            // Initialiser la connexion à la base de données et les DAOs
             Connection connection = DBUtil.getConnection();
             eventDAO = new EventDAO(connection);
+            participeDAO = new ParticipeDAO(connection);
+
+            // Pour les besoins de démonstration, définir un ID utilisateur par défaut
+            currentUserId = 5L;
 
             // Configurer les colonnes de la TableView
-            // Utilisation des noms de propriétés en snake_case pour correspondre à la base de données
             idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
             titreColumn.setCellValueFactory(new PropertyValueFactory<>("titre"));
             dateDebutColumn.setCellValueFactory(new PropertyValueFactory<>("dateDebut"));
@@ -79,8 +97,16 @@ public class ListEvent implements Initializable {
             statutColumn.setCellValueFactory(new PropertyValueFactory<>("statut"));
             categorieColumn.setCellValueFactory(new PropertyValueFactory<>("categorie"));
 
+            // Configurer la colonne d'actions avec un bouton "Participer"
+            setupActionsColumn();
+
             // Charger les événements
             loadEvents();
+
+            // Configuration du bouton "Mes Participations"
+            if (btnMesParticipations != null) {
+                btnMesParticipations.setOnAction(event -> afficherMesParticipations());
+            }
 
             System.out.println("Initialisation terminée");
 
@@ -89,6 +115,74 @@ public class ListEvent implements Initializable {
                     "Impossible de se connecter à la base de données: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Configure la colonne d'actions avec un bouton "Participer"
+     */
+    private void setupActionsColumn() {
+        // Vérifier si la colonne d'actions existe
+        if (actionsColumn == null) {
+            // Créer la colonne d'actions si elle n'existe pas
+            actionsColumn = new TableColumn<>("Actions");
+            eventTable.getColumns().add(actionsColumn);
+        }
+
+        actionsColumn.setCellFactory(new Callback<TableColumn<Event, Void>, TableCell<Event, Void>>() {
+            @Override
+            public TableCell<Event, Void> call(final TableColumn<Event, Void> param) {
+                return new TableCell<Event, Void>() {
+                    private final Button participerButton = new Button("Participer");
+
+                    {
+                        participerButton.setOnAction(event -> {
+                            Event eventData = getTableView().getItems().get(getIndex());
+                            ouvrirFormulaireParticipation(eventData);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            // Récupérer l'événement de cette ligne
+                            Event event = getTableView().getItems().get(getIndex());
+
+                            // Vérifier s'il reste des places disponibles
+                            try {
+                                int placesRestantes = participeDAO.obtenirPlacesRestantes((long) event.getId());
+
+                                // Vérifier si l'utilisateur participe déjà à cet événement
+                                boolean dejaInscrit = participeDAO.utilisateurParticipeDejaAEvenement(
+                                        (long) event.getId(), currentUserId);
+
+                                // Configurer le bouton en fonction de l'état
+                                if (dejaInscrit) {
+                                    participerButton.setText("Inscrit");
+                                    participerButton.setStyle("-fx-background-color: #808080; -fx-text-fill: white;");
+                                    participerButton.setDisable(true);
+                                } else if (placesRestantes <= 0) {
+                                    participerButton.setText("Complet");
+                                    participerButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+                                    participerButton.setDisable(true);
+                                } else {
+                                    participerButton.setText("Participer");
+                                    participerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+                                    participerButton.setDisable(false);
+                                }
+
+                                setGraphic(participerButton);
+                            } catch (Exception  e) {
+                                e.printStackTrace();
+                                setGraphic(participerButton);
+                            }
+                        }
+                    }
+                };
+            }
+        });
     }
 
     /**
@@ -113,6 +207,69 @@ public class ListEvent implements Initializable {
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de chargement",
                     "Impossible de charger les événements: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Ouvre le formulaire de participation pour un événement
+     */
+    private void ouvrirFormulaireParticipation(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/Gestionevent/AjoutParticipe.fxml"));
+            Parent root = loader.load();
+
+            // Configurer le contrôleur
+            AjoutParticipe controller = loader.getController();
+            controller.setEvent(event);
+            controller.setUserId(currentUserId);
+            controller.initialiser();
+
+            // Créer et afficher la fenêtre modale
+            Stage stage = new Stage();
+            stage.setTitle("Participer à l'événement: " + event.getTitre());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(eventTable.getScene().getWindow());
+            stage.showAndWait();
+
+            // Recharger la liste après participation
+            loadEvents();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir le formulaire de participation: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Affiche les participations de l'utilisateur actuel
+     */
+    private void afficherMesParticipations() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/rewear/Gestionevent/MesParticipations.fxml"));
+            Parent root = loader.load();
+
+            // Configurer le contrôleur
+            // MesParticipationsController controller = loader.getController();
+            // controller.setUserId(currentUserId);
+            // controller.setParticipeDAO(participeDAO);
+            // controller.setEventDAO(eventDAO);
+            // controller.loadParticipations();
+
+            // Créer et afficher la fenêtre modale
+            Stage stage = new Stage();
+            stage.setTitle("Mes Participations");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(eventTable.getScene().getWindow());
+            stage.showAndWait();
+
+            // Recharger la liste après annulation éventuelle
+            loadEvents();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible d'ouvrir la liste des participations: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -154,6 +311,7 @@ public class ListEvent implements Initializable {
             e.printStackTrace();
         }
     }
+
     // Gérer l'action du bouton Modifier
     @FXML
     private void handleEdit(ActionEvent event) {
@@ -175,7 +333,7 @@ public class ListEvent implements Initializable {
                 stage.initOwner(editButton.getScene().getWindow());
 
                 // Passer l'événement sélectionné au contrôleur de la fenêtre ModifierEvent
-                 UpdateEvent controller = loader.getController();
+                UpdateEvent controller = loader.getController();
                 controller.setEventDAO(eventDAO);
                 controller.setEventToEdit(selectedEvent);  // Passer l'événement sélectionné pour modification
 
@@ -193,6 +351,7 @@ public class ListEvent implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Aucun événement sélectionné", "Veuillez sélectionner un événement à modifier.");
         }
     }
+
     @FXML
     private void handleDelete(ActionEvent event) {
         try {
@@ -225,7 +384,19 @@ public class ListEvent implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la fenêtre de suppression.");
         }
     }
+    @FXML
+    private void handleAddParticipant(ActionEvent event) {
+        // Récupérer l'événement sélectionné
+        Event selectedEvent = eventTable.getSelectionModel().getSelectedItem();
 
+        if (selectedEvent != null) {
+            // Vous pouvez appeler votre méthode existante
+            ouvrirFormulaireParticipation(selectedEvent);
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Aucun événement sélectionné",
+                    "Veuillez sélectionner un événement avant de participer.");
+        }
+    }
     /**
      * Affiche une alerte
      */

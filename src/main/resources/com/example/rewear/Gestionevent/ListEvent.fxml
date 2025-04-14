@@ -45,6 +45,7 @@
                         <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAdd" prefHeight="30.0" prefWidth="120.0" text="Ajouter" />
                         <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleEdit" prefHeight="30.0" prefWidth="120.0" text="Modifier" />
                         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" prefHeight="30.0" prefWidth="120.0" text="Supprimer" />
+                        <Button fx:id="addParticipantButton" mnemonicParsing="false" onAction="#handleAddParticipant" prefHeight="30.0" prefWidth="160.0" text="Participer" />
                     </children>
                 </HBox>
             </children>
