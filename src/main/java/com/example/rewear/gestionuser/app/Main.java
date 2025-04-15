@@ -17,6 +17,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 400, 600);
 
         // Configurer la fenêtre principale
+
         primaryStage.setTitle("Login - Rewear");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
