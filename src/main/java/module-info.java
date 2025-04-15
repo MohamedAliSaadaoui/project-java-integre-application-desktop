@@ -3,6 +3,7 @@ module com.example.rewear {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.sql;
+    requires com.google.protobuf;
 
 
     opens com.example.rewear to javafx.fxml;
