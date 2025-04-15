@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GestionArticle.Controllers.ModifierArticleController">
+   <children>
+      <AnchorPane layoutX="10.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <TextField fx:id="TFContenuModif" layoutX="84.0" layoutY="144.0" prefHeight="51.0" prefWidth="238.0" promptText="Description" />
+            <TextField fx:id="TFtitre" layoutX="84.0" layoutY="56.0" prefHeight="26.0" prefWidth="238.0" promptText="Titre" />
+            <Button fx:id="modifierbutton" layoutX="34.0" layoutY="267.0" mnemonicParsing="false" onAction="#modifierbutton" prefHeight="26.0" prefWidth="139.0" text="modifier" />
+            <Label layoutX="9.0" layoutY="64.0" prefHeight="26.0" prefWidth="50.0" text="Titre" />
+            <Label layoutY="156.0" prefHeight="26.0" prefWidth="90.0" text="Description" />
+            <Label fx:id="warningtitle" layoutX="93.0" layoutY="122.0" prefHeight="18.0" prefWidth="219.0" text="la longeur min est 4 caractères" textFill="RED" visible="false" />
+            <Label fx:id="goodtitle" layoutX="95.0" layoutY="122.0" prefHeight="18.0" prefWidth="238.0" text="bravooooooo" textFill="#13a12b" visible="false" />
+            <Label fx:id="warningDescription" layoutX="73.0" layoutY="209.0" prefHeight="18.0" prefWidth="300.0" text="la description doit etre contient 12 caractère au moins" textFill="#fa0000" visible="false" />
+            <Label fx:id="gooddescription" layoutX="89.0" layoutY="209.0" prefHeight="18.0" prefWidth="228.0" text="bravooooooo" textFill="#0c9c22" visible="false" />
+            <Button fx:id="goafficher" layoutX="195.0" layoutY="267.0" mnemonicParsing="false" onAction="#goafficherAction" prefHeight="26.0" prefWidth="139.0" stylesheets="@css/style.css" text="Navigate" />
+         </children>
+      </AnchorPane>
+      <Label fx:id="label" layoutX="415.0" layoutY="75.0" prefHeight="31.0" prefWidth="280.0" stylesheets="@../../../../../../forum_java/3A5_DevMasters/src/main/resources/reclamationGui/css/styles.css">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+         <graphic>
+            <Button fx:id="uploadbuttonmodif" mnemonicParsing="false" onAction="#uploadimgmodif" prefHeight="33.0" prefWidth="40.0" style="-fx-background-color: #FFFFFF;">
+               <graphic>
+                  <ImageView fitHeight="38.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/upload.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </graphic>
+      </Label>
+      <Button fx:id="uploadbutton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#uploadimg" prefHeight="33.0" prefWidth="40.0" style="-fx-background-color: #FFFFFF;" />
+      <Text layoutX="438.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image : (optionnel)" wrappingWidth="116.80303955078125">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="imgView_reclamationmodifffffff" fitHeight="183.0" fitWidth="257.0" layoutX="426.0" layoutY="137.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>
