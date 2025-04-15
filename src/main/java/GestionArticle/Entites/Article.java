@@ -18,7 +18,7 @@ public class Article {
     public Article(String title, Date date, String content, String image) {
         this.title = title;
         this.date = date;
-        this.content = content;
+        this.content = content ;
         this.image = image;
         this.user = new User(1); // ID utilisateur par défaut
     }
