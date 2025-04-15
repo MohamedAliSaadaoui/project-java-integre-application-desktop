@@ -2,7 +2,7 @@ package GestionArticle.Service;
 
 import GestionArticle.Entites.Article;
 import GestionArticle.Entites.User;
-import GestionArticle.utils.DataSource;
+import GestionArticle.Utils.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;

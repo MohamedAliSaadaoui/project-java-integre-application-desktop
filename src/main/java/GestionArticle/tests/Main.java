@@ -19,7 +19,7 @@ public class Main {
             User user = new User(1); // Remplace 1 par un ID valide
 
             // Création d'un article
-            Article article = new Article(1,"laminee",sqlDate,"adaz","alamineeeeeeeeeeeeeee",user);
+            Article article = new Article(1,"lam",sqlDate,"adaz","ala",user);
 
             // Service
             //ServiceArticle sp = new ServiceArticle();
@@ -41,13 +41,13 @@ public class Main {
         // Création d'un utilisateur fictif avec un ID existant dans la DB
         User user = new User(1); // Remplace 1 par un ID valide
         // Create the Article object with updated data
-        Article article = new Article(12);
+        Article article = new Article(1);
         article.setTitle("Updated Title");  // Set the updated title
         article.setContent("Updated Content");  // Set the updated content
         article.setImage("updated_image.jpg");  // Set the updated image
 
 // Now create the Commentaire object with the updated article
-        Commentaire commentaire = new Commentaire(2, user, article, sqlDate, "a");
+        Commentaire commentaire = new Commentaire(1, user, article, sqlDate, "a");
 
 
         // Service
