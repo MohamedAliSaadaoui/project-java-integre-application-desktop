@@ -17,6 +17,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.InputStream;
 
 public class SignUp {
     static {
@@ -29,15 +32,24 @@ public class SignUp {
         }
     }
 
-    @FXML private TextField usernameField;
-    @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private TextField phoneField;
-    @FXML private DatePicker birthDatePicker;
-    @FXML private TextField addressField;
-    @FXML private Label photoPathLabel;
-    @FXML private Button uploadButton;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private DatePicker birthDatePicker;
+    @FXML
+    private TextField addressField;
+    @FXML
+    private Label photoPathLabel;
+    @FXML
+    private Button uploadButton;
 
     private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/rewear_db";
     private final String DB_USER = "root";
@@ -158,6 +170,48 @@ public class SignUp {
         } catch (SQLException e) {
             System.err.println("Erreur de connexion: " + e.getMessage());
             return false;
+        }
+    }
+
+
+    @FXML
+    private void handleBackToLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/login.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private ImageView logoImageView;
+
+    @FXML
+    public void initialize() {
+        try {
+            // Méthode 1: Utiliser getResourceAsStream (plus fiable)
+            InputStream stream = getClass().getResourceAsStream("/images/logo rewear.jpg");
+            if (stream != null) {
+                Image image = new Image(stream);
+                logoImageView.setImage(image);
+            } else {
+                System.err.println("Ressource d'image introuvable");
+            }
+
+        /* Méthode alternative si la précédente ne fonctionne pas
+        String imagePath = getClass().getResource("/images/logo.png").toExternalForm();
+        Image image = new Image(imagePath);
+        logoImageView.setImage(image);
+        */
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
+            // Vous pouvez créer une image par défaut si nécessaire
         }
     }
 }

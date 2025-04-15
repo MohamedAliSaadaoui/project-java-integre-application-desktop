@@ -5,56 +5,195 @@
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
-<?import javafx.stage.FileChooser?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.Circle?>
 
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.example.rewear.gestionuser.app.controllers.SignUp"
-           style="-fx-background-color: linear-gradient(to right, #ffecd2, #fcb69f);">
+           style="-fx-background-color: linear-gradient(to right bottom, #ffecd2, #fcb69f);">
 
-    <VBox spacing="12" alignment="CENTER"
-          maxWidth="400"
-          style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+    <!-- Conteneur principal amélioré et redimensionné -->
+    <VBox alignment="CENTER" spacing="12" maxWidth="700" prefWidth="650"
+          style="-fx-background-color: white;
+                 -fx-border-radius: 20;
+                 -fx-background-radius: 20;">
+        <effect>
+            <DropShadow color="rgba(0,0,0,0.3)" radius="10" spread="0.05" />
+        </effect>
 
         <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
+            <Insets top="25" right="40" bottom="25" left="40"/>
         </padding>
 
+        <!-- Logo avec taille ajustée -->
+        <StackPane>
+            <Circle radius="35" fill="#fff5f0" />
+            <ImageView fx:id="logoImageView" fitHeight="55" fitWidth="55" preserveRatio="true">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.15)" radius="3" />
+                </effect>
+            </ImageView>
+        </StackPane>
+
+        <!-- Titre -->
         <Label text="Créer un compte"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+               style="-fx-font-size: 28px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #333333;
+                      -fx-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        </Label>
 
-        <!-- Champ Nom d'utilisateur -->
-        <TextField fx:id="usernameField" promptText="Nom d'utilisateur" prefWidth="300"/>
+        <!-- Description -->
+        <Label text="Rejoignez notre communauté ReWear"
+               style="-fx-font-size: 14px;
+                      -fx-text-fill: #666666;
+                      -fx-font-style: italic;">
+            <VBox.margin>
+                <Insets top="-5" bottom="5" />
+            </VBox.margin>
+        </Label>
 
-        <!-- Champ Email -->
-        <TextField fx:id="emailField" promptText="Adresse e-mail" prefWidth="300"/>
+        <!-- Séparateur -->
+        <Separator style="-fx-background-color: #e0e0e0; -fx-opacity: 0.6;" />
 
-        <!-- Champ Mot de passe -->
-        <PasswordField fx:id="passwordField" promptText="Mot de passe" prefWidth="300"/>
+        <!-- Section Informations personnelles -->
+        <Label text="Informations personnelles"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #ff7e5f;" />
 
-        <!-- Champ Confirmer le mot de passe -->
-        <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" prefWidth="300"/>
+        <!-- Formulaire amélioré et espacé correctement -->
+        <VBox spacing="10">
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Nom d'utilisateur" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                    <TextField fx:id="usernameField" promptText="Votre nom d'utilisateur"
+                               style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+                </VBox>
 
-        <!-- Champ Date de naissance -->
-        <DatePicker fx:id="birthDatePicker" promptText="Date de naissance" prefWidth="300"/>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Adresse e-mail" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                    <TextField fx:id="emailField" promptText="exemple@email.com"
+                               style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+                </VBox>
+            </HBox>
 
-        <!-- Champ Numéro de téléphone -->
-        <TextField fx:id="phoneField" promptText="Numéro de téléphone" prefWidth="300"/>
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Mot de passe" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                    <PasswordField fx:id="passwordField" promptText="8 caractères minimum"
+                                   style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+                </VBox>
 
-        <!-- Champ Adresse -->
-        <TextField fx:id="addressField" promptText="Adresse" prefWidth="300"/>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Confirmer le mot de passe" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                    <PasswordField fx:id="confirmPasswordField" promptText="Répéter le mot de passe"
+                                   style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+                </VBox>
+            </HBox>
 
-        <!-- Photo de profil -->
-        <HBox spacing="10" alignment="CENTER">
-            <Label text="Photo de profil :" />
-            <Button fx:id="uploadButton" text="Choisir un fichier" onAction="#handleFileUpload" />
-            <Label fx:id="photoPathLabel" text="Aucune photo sélectionnée" style="-fx-font-size: 12px; -fx-text-fill: gray;" />
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Date de naissance" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                    <DatePicker fx:id="birthDatePicker" promptText="JJ/MM/AAAA"
+                                style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+                </VBox>
+
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Numéro de téléphone" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                    <TextField fx:id="phoneField" promptText="+33 6 XX XX XX XX"
+                               style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+                </VBox>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Adresse" style="-fx-font-weight: bold; -fx-text-fill: #555555;" />
+                <TextField fx:id="addressField" promptText="Votre adresse complète"
+                           style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #e0e0e0; -fx-border-width: 1;" />
+            </VBox>
+        </VBox>
+
+        <!-- Séparateur -->
+        <Separator style="-fx-background-color: #e0e0e0; -fx-opacity: 0.6;">
+            <VBox.margin>
+                <Insets top="10" bottom="10" />
+            </VBox.margin>
+        </Separator>
+
+        <!-- Section photo de profil -->
+        <Label text="Photo de profil"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #ff7e5f;" />
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <StackPane>
+                <Circle radius="35" fill="#f5f5f5" />
+                <ImageView fx:id="profilePreview" fitHeight="60" fitWidth="60" preserveRatio="true">
+                    <effect>
+                        <DropShadow color="rgba(0,0,0,0.1)" radius="3" />
+                    </effect>
+                </ImageView>
+            </StackPane>
+
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Button fx:id="uploadButton" text="Choisir une photo"
+                        onAction="#handleFileUpload"
+                        style="-fx-background-color: #ff9a7f;
+                              -fx-text-fill: white;
+                              -fx-background-radius: 8;
+                              -fx-font-weight: bold;
+                              -fx-padding: 6 12;
+                              -fx-cursor: hand;">
+                </Button>
+
+                <Label fx:id="photoPathLabel" text="Aucune photo sélectionnée"
+                       style="-fx-font-size: 12px; -fx-text-fill: gray;" />
+
+                <Label text="Format recommandé: JPG ou PNG, max 5 Mo"
+                       style="-fx-font-size: 11px; -fx-text-fill: #999999; -fx-font-style: italic;" />
+            </VBox>
         </HBox>
 
-        <!-- Bouton S'inscrire -->
-        <Button fx:id="signUpButton"
-                text="S'inscrire"
-                prefWidth="200"
-                onAction="#handleSignUp"
-                style="-fx-background-color: #ff7e5f; -fx-text-fill: white; -fx-background-radius: 20;" />
+        <!-- Conditions d'utilisation avec checkbox améliorée -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="termsCheckbox">
+                <padding>
+                    <Insets top="5" right="5" bottom="5" left="5"/>
+                </padding>
+            </CheckBox>
+            <Label text="J'accepte les conditions d'utilisation et la politique de confidentialité"
+                   style="-fx-font-size: 13px; -fx-text-fill: #666666;" />
+        </HBox>
+
+        <!-- Séparateur -->
+        <Separator style="-fx-background-color: #e0e0e0; -fx-opacity: 0.6;" />
+
+        <!-- Boutons d'action -->
+        <VBox spacing="10" alignment="CENTER">
+            <Button fx:id="signUpButton"
+                    text="S'inscrire"
+                    prefWidth="250"
+                    prefHeight="38"
+                    onAction="#handleSignUp"
+                    style="-fx-background-color: #ff7e5f;
+                           -fx-text-fill: white;
+                           -fx-background-radius: 20;
+                           -fx-font-weight: bold;
+                           -fx-font-size: 14px;
+                           -fx-cursor: hand;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.2)" radius="5" spread="0.05" />
+                </effect>
+            </Button>
+
+            <Button fx:id="backButton"
+                    text="← Retour à la connexion"
+                    prefWidth="250"
+                    onAction="#handleBackToLogin"
+                    style="-fx-background-color: transparent;
+                           -fx-border-color: #ff7e5f;
+                           -fx-text-fill: #ff7e5f;
+                           -fx-border-radius: 20;
+                           -fx-cursor: hand;
+                           -fx-font-size: 13px;"/>
+        </VBox>
     </VBox>
 </StackPane>

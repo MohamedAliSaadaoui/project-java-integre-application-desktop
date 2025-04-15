@@ -5,16 +5,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,9 +37,43 @@ public class Login {
         @FXML
         private Button loginButton;
 
+        @FXML
+        private Hyperlink forgotPasswordLink;
+
+        @FXML
+        private ImageView logoImageView;
+
         private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/rewear_db";
         private final String DB_USER = "root";
         private final String DB_PASSWORD = "";
+
+        @FXML
+        public void initialize() {
+                try {
+                        // Chargement de l'image du logo
+                        InputStream stream = getClass().getResourceAsStream("/images/logo rewear.jpg");
+                        if (stream != null) {
+                                Image image = new Image(stream);
+                                logoImageView.setImage(image);
+                                System.out.println("Logo chargé avec succès");
+                        } else {
+                                System.err.println("Ressource d'image introuvable");
+
+                                // Alternative - essayez un autre chemin si le premier échoue
+                                stream = getClass().getClassLoader().getResourceAsStream("images/logo rewear.jpg");
+                                if (stream != null) {
+                                        Image image = new Image(stream);
+                                        logoImageView.setImage(image);
+                                        System.out.println("Logo chargé avec succès via ClassLoader");
+                                } else {
+                                        System.err.println("Image introuvable via le ClassLoader également");
+                                }
+                        }
+                } catch (Exception e) {
+                        System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
+                        e.printStackTrace();
+                }
+        }
 
         // Méthode pour gérer la connexion
         @FXML
@@ -172,5 +209,13 @@ public class Login {
                         e.printStackTrace();
                         showAlert("Erreur", "Erreur de redirection vers la page d'inscription: " + e.getMessage(), Alert.AlertType.ERROR);
                 }
+        }
+
+        // Méthode pour gérer le lien "mot de passe oublié"
+        @FXML
+        private void handleForgotPassword(ActionEvent event) {
+                // Implémentez la logique pour réinitialiser le mot de passe
+                // Par exemple, rediriger vers un écran de réinitialisation ou envoyer un email
+                showAlert("Information", "La fonctionnalité de récupération de mot de passe n'est pas encore implémentée.", Alert.AlertType.INFORMATION);
         }
 }
