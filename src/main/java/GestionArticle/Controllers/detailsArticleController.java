@@ -69,7 +69,7 @@ public class detailsArticleController {
         if (confirmed && article != null) {
             try {
                 serviceArticle.supprimer(article.getId());
-                showAlert("Article supprimé avec succès.");
+                showAlert("Article supprimé avec succès");
 
                 // Notify the AfficherArticle controller to refresh the list
                 reloadArticlesList();
