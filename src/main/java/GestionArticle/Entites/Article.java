@@ -1,7 +1,5 @@
 package GestionArticle.Entites;
 
-import com.google.protobuf.TextFormat;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package Utils;
+package GestionArticle.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

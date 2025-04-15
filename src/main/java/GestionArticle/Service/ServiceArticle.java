@@ -1,4 +1,4 @@
-package Service;
+package GestionArticle.Service;
 
 import GestionArticle.Entites.Article;
 import GestionArticle.Entites.User;
