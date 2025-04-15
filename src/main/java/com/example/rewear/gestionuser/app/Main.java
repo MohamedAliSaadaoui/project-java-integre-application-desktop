@@ -10,15 +10,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Charger le fichier FXML de la scène de login
-        Parent loginRoot = FXMLLoader.load(getClass().getResource("/interfaces/login.fxml"));
+        // Charger le fichier FXML principal qui contient le conteneur pour les autres vues
+        Parent root = FXMLLoader.load(getClass().getResource("/interfaces/main.fxml"));
 
-        // Créer la scène avec le root de la page de login
-        Scene loginScene = new Scene(loginRoot);
+        // Créer la scène avec le conteneur principal
+        Scene scene = new Scene(root, 400, 600);
 
-        // Définir la scène principale et le titre
-        primaryStage.setScene(loginScene);
+        // Configurer la fenêtre principale
         primaryStage.setTitle("Login - Rewear");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(true);
+        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(600);
 
         // Afficher la fenêtre principale
         primaryStage.show();

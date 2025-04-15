@@ -7,57 +7,54 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.example.rewear.gestionuser.app.controllers.Login"
-           style="-fx-background-color: linear-gradient(to bottom, #a8edea, #fed6e3);">
+<VBox fx:id="loginPane" spacing="15" alignment="CENTER"
+      style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+      maxWidth="800" prefWidth="400"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.rewear.gestionuser.app.controllers.Login">
 
-    <VBox spacing="15" alignment="CENTER"
-          style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
-          maxWidth="800" prefWidth="400">
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
 
-        <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
-        </padding>
+    <!-- Logo -->
+    <ImageView fx:id="logoImageView" fitHeight="120.0" fitWidth="200.0" preserveRatio="true">
+        <VBox.margin>
+            <Insets bottom="20.0" />
+        </VBox.margin>
+    </ImageView>
 
-        <!-- Logo -->
-        <ImageView fx:id="logoImageView" fitHeight="120.0" fitWidth="200.0" preserveRatio="true">
-            <VBox.margin>
-                <Insets bottom="20.0" />
-            </VBox.margin>
-        </ImageView>
+    <!-- Titre -->
+    <Label text="Connexion"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-        <!-- Titre -->
-        <Label text="Connexion"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <!-- Champ email -->
+    <TextField fx:id="emailField"
+               promptText="Adresse e-mail"
+               prefWidth="300"/>
 
-        <!-- Champ email -->
-        <TextField fx:id="emailField"
-                   promptText="Adresse e-mail"
+    <!-- Champ mot de passe -->
+    <PasswordField fx:id="passwordField"
+                   promptText="Mot de passe"
                    prefWidth="300"/>
 
-        <!-- Champ mot de passe -->
-        <PasswordField fx:id="passwordField"
-                       promptText="Mot de passe"
-                       prefWidth="300"/>
+    <!-- Bouton de connexion -->
+    <Button fx:id="loginButton"
+            text="Se connecter"
+            prefWidth="200"
+            style="-fx-background-color: #6a11cb; -fx-text-fill: white; -fx-background-radius: 20;"
+            onAction="#handleLogin"/>
 
-        <!-- Bouton de connexion -->
-        <Button fx:id="loginButton"
-                text="Se connecter"
-                prefWidth="200"
-                style="-fx-background-color: #6a11cb; -fx-text-fill: white; -fx-background-radius: 20;"
-                onAction="#handleLogin"/>
+    <!-- Bouton de création de compte -->
+    <Button fx:id="signUpButton"
+            text="Créer un compte"
+            prefWidth="200"
+            style="-fx-background-color: #2575fc; -fx-text-fill: white; -fx-background-radius: 20;"
+            onAction="#handleSignUp"/>
 
-        <!-- Bouton de création de compte -->
-        <Button fx:id="signUpButton"
-                text="Créer un compte"
-                prefWidth="200"
-                style="-fx-background-color: #2575fc; -fx-text-fill: white; -fx-background-radius: 20;"
-                onAction="#handleSignUp"/>
+    <!-- Lien mot de passe oublié -->
+    <Hyperlink fx:id="forgotPasswordLink"
+               text="Mot de passe oublié ?" onAction="#handleForgotPassword"
+               style="-fx-text-fill: #555;"/>
 
-        <!-- Lien mot de passe oublié -->
-        <Hyperlink fx:id="forgotPasswordLink"
-                   text="Mot de passe oublié ?"
-                   style="-fx-text-fill: #555;"/>
-
-    </VBox>
-</StackPane>
+</VBox>

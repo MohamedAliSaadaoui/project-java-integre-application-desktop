@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="mainContainer" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.rewear.gestionuser.app.controllers.Main"
+           style="-fx-background-color: linear-gradient(to bottom, #a8edea, #fed6e3);">
+    <!-- Les vues login et resetpassword seront ajoutées ici dynamiquement -->
+</StackPane>

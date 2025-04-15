@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,9 +44,23 @@ public class Login {
         @FXML
         private ImageView logoImageView;
 
+        @FXML
+        private VBox loginPane;  // Référence au conteneur de login pour la visibilité
+
+        // Référence au contrôleur principal pour la navigation
+        private Main mainController;
+
         private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/rewear_db";
         private final String DB_USER = "root";
         private final String DB_PASSWORD = "";
+
+        /**
+         * Définit le contrôleur principal pour la navigation
+         * @param main le contrôleur principal
+         */
+        public void setMainController(Main main) {
+                this.mainController = main;
+        }
 
         @FXML
         public void initialize() {
@@ -211,11 +226,13 @@ public class Login {
                 }
         }
 
-        // Méthode pour gérer le lien "mot de passe oublié"
+        // Méthode pour gérer le lien "mot de passe oublié" - modifié pour utiliser la navigation interne
         @FXML
         private void handleForgotPassword(ActionEvent event) {
-                // Implémentez la logique pour réinitialiser le mot de passe
-                // Par exemple, rediriger vers un écran de réinitialisation ou envoyer un email
-                showAlert("Information", "La fonctionnalité de récupération de mot de passe n'est pas encore implémentée.", Alert.AlertType.INFORMATION);
+                if (mainController != null) {
+                        mainController.showResetPasswordScreen();
+                } else {
+                        System.err.println("Erreur: Le contrôleur principal n'est pas défini.");
+                }
         }
 }
