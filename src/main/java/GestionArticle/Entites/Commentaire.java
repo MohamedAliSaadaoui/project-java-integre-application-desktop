@@ -8,6 +8,7 @@ public class Commentaire {
     private Article article;   // Association avec la classe Article
     private Date date_comm;
     private String contenu_comm;
+
     public Commentaire(Article article, Date date_comm, String contenu_comm) {
         this.article = article;
         this.date_comm = date_comm;

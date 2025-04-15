@@ -1,0 +1,171 @@
+/* Button Styles */
+.button {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: #fff; /* White text */
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 20px; /* Added padding for better button sizing */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.button:hover {
+    -fx-background-color: #45a049; /* Darker green on hover */
+    -fx-text-fill: #fff;
+}
+
+.icon-button {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: #fff;
+    -fx-background-radius: 50%;
+    -fx-padding: 10px; /* Padding for better button size */
+    -fx-font-size: 16px;
+}
+
+.icon-button:hover {
+    -fx-background-color: #45a049; /* Darker green on hover */
+    -fx-text-fill: #fff;
+}
+
+/* Button Style (for other uses like actions) */
+.button-style {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: #fff; /* White text */
+    -fx-background-radius: 10px;
+    -fx-min-height: 40px;
+    -fx-min-width: 100px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-transition: all 0.3s ease; /* Smooth hover transition */
+}
+
+.button-style:hover {
+    -fx-background-color: #45a049; /* Darker green on hover */
+    -fx-text-fill: #fff;
+}
+
+/* Button Menu (used for menu buttons) */
+.button-menu {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: #fff; /* White text */
+    -fx-background-radius: 10px;
+    -fx-min-height: 50px;
+    -fx-min-width: 100px;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px;
+    -fx-transition: all 0.3s ease;
+}
+
+.button-menu:hover {
+    -fx-background-color: #45a049; /* Darker green on hover */
+    -fx-text-fill: #fff;
+}
+
+/* ComboBox Styles */
+.combo-box {
+    -fx-font-size: 14px;
+    -fx-cell-size: 30px;
+    -fx-prompt-text-fill: #aaa;
+    -fx-text-fill: #333;
+    -fx-background-color: #fff;
+    -fx-border-color: #4CAF50; /* Green border */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #f0f0f0;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .list-cell {
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #fff;
+    -fx-border-color: #4CAF50; /* Green border */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+/* Input Fields */
+.text-input {
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: gray;
+    -fx-text-fill: black;
+    -fx-background-color: #fff;
+    -fx-border-color: #4CAF50; /* Green border */
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-transition: all 0.3s ease;
+}
+
+.text-input:focused {
+    -fx-border-color: #388e3c; /* Darker green on focus */
+    -fx-background-color: #f4f7fb; /* Light background when focused */
+}
+
+.text-input-error {
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-background-color: #fff;
+    -fx-border-color: red;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+}
+
+.warning-text {
+    -fx-text-fill: red;
+    -fx-font-weight: bold;
+}
+
+/* Success and info texts */
+.success-text {
+    -fx-text-fill: green;
+    -fx-font-weight: bold;
+}
+
+/* Login Inputs */
+.login-text-input {
+    -fx-background-color: transparent;
+    -fx-border-color: #4CAF50; /* Green border */
+    -fx-border-width: 0px 0px 2px 0px;
+    -fx-padding: 10px;
+}
+
+.login-text-input:focused {
+    -fx-border-color: #388e3c; /* Darker green on focus */
+}
+
+/* Miscellaneous */
+.white-background {
+    -fx-background-color: #fff;
+}
+
+.transparent {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.municipalite {
+    -fx-background-radius: 50%;
+}
+
+.light-grey-background {
+    -fx-background-color: #f3f3f3;
+}
+
+.profile-layout {
+    -fx-background-color: #EBC95E;
+    -fx-background-radius: 0 0 50% 50%;
+    -fx-padding: 20px; /* Add padding for spacing */
+}
