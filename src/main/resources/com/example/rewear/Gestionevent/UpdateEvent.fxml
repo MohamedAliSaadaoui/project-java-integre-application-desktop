@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.rewear.Gestionevent.Controller.UpdateEvent"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <!-- Titre -->
+    <Label text="Modifier un Événement" style="-fx-font-size: 18px; -fx-font-weight: bold;" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" />
+
+    <!-- Formulaire de modification -->
+    <VBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="50">
+        <TextField fx:id="titreField" promptText="Titre" />
+        <DatePicker fx:id="dateDebutPicker" promptText="Date début" />
+        <DatePicker fx:id="dateFinPicker" promptText="Date fin" />
+        <TextField fx:id="lieuField" promptText="Lieu" />
+        <TextField fx:id="statutField" promptText="Statut" />
+        <TextField fx:id="categorieField" promptText="Catégorie" />
+    </VBox>
+
+    <!-- Boutons -->
+    <HBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.bottomAnchor="10">
+        <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave"/>
+        <Button text="Annuler" onAction="#handleCancel"/>
+    </HBox>
+
+</AnchorPane>
