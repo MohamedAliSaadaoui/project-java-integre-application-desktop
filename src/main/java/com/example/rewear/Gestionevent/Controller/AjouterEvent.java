@@ -6,11 +6,16 @@ import com.example.rewear.Gestionevent.Entity.SessionManager;
 import com.example.rewear.Gestionevent.Service.EventDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -40,6 +45,9 @@ public class AjouterEvent implements Initializable {
 
     @FXML
     private Button creer;
+
+    @FXML
+    private Button retour;
 
 
 
@@ -89,7 +97,7 @@ public class AjouterEvent implements Initializable {
                     lieu_ajout.getText(),
                     statut_ajout.getText(),
                     categorie_ajout.getText(),
-                     5 // ID créateur par défaut
+                    5 // ID créateur par défaut
             );
 
             // Sauvegarder dans la base de données
@@ -120,6 +128,18 @@ public class AjouterEvent implements Initializable {
         categorie_ajout.clear();
     }
 
+    /**
+     * Gère l'action du bouton Retour
+     * Ferme simplement la fenêtre actuelle pour revenir à l'écran précédent
+     */
+    @FXML
+    private void handleRetour() {
+        // Obtenir la fenêtre actuelle à partir du bouton retour
+        Stage stage = (Stage) retour.getScene().getWindow();
+
+        // Fermer cette fenêtre
+        stage.close();
+    }
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

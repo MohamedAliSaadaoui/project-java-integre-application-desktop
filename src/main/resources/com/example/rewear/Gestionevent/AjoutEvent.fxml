@@ -1,29 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rewear.Gestionevent.Controller.AjouterEvent">
-   <children>
-      <Label layoutX="166.0" layoutY="38.0" text="Création d'un événement " textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="23.0" />
-         </font>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.rewear.Gestionevent.Controller.AjouterEvent"
+           style="-fx-background-color: linear-gradient(to bottom, #a8edea, #fed6e3);">
+   <VBox spacing="15" alignment="CENTER"
+         style="-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);"
+         maxWidth="800" prefWidth="500">
+      <padding>
+         <Insets top="30" right="30" bottom="30" left="30"/>
+      </padding>
+      <!-- Pas de logo -->
+      <!-- Titre -->
+      <Label text="Création d'un événement"
+             style="-fx-font-size: 24px; -fx-font-weight: bold;">
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
       </Label>
-      <TextField fx:id="titre_ajout" layoutX="27.0" layoutY="99.0" promptText="Titre" />
-      <TextField fx:id="dated_ajout" layoutX="26.0" layoutY="146.0" promptText="Date début" />
-      <TextField fx:id="statut_ajout" layoutX="235.0" layoutY="146.0" promptText="Statut" />
-      <TextField fx:id="datef_ajout" layoutX="26.0" layoutY="200.0" promptText="Date fin" />
-      <TextField fx:id="categorie_ajout" layoutX="235.0" layoutY="200.0" promptText="Catégorie" />
-      <TextField fx:id="lieu_ajout" layoutX="235.0" layoutY="99.0" promptText="Lieu" />
-      <Button fx:id="creer" layoutX="174.0" layoutY="279.0" mnemonicParsing="false" onAction="#handleCreate" text="Créer">
-         <font>
-            <Font size="25.0" />
-         </font>
+
+      <!-- Champs de formulaire en deux colonnes -->
+      <GridPane hgap="15" vgap="15" alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="220.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="220.0" />
+         </columnConstraints>
+
+         <!-- Première ligne -->
+         <TextField fx:id="titre_ajout" promptText="Titre"
+                    style="-fx-background-radius: 5;"
+                    GridPane.columnIndex="0" GridPane.rowIndex="0" />
+         <TextField fx:id="lieu_ajout" promptText="Lieu"
+                    style="-fx-background-radius: 5;"
+                    GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+         <!-- Deuxième ligne -->
+         <TextField fx:id="dated_ajout" promptText="Date début"
+                    style="-fx-background-radius: 5;"
+                    GridPane.columnIndex="0" GridPane.rowIndex="1" />
+         <TextField fx:id="statut_ajout" promptText="Statut"
+                    style="-fx-background-radius: 5;"
+                    GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+         <!-- Troisième ligne -->
+         <TextField fx:id="datef_ajout" promptText="Date fin"
+                    style="-fx-background-radius: 5;"
+                    GridPane.columnIndex="0" GridPane.rowIndex="2" />
+         <TextField fx:id="categorie_ajout" promptText="Catégorie"
+                    style="-fx-background-radius: 5;"
+                    GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      </GridPane>
+
+      <!-- Bouton de création -->
+      <Button fx:id="creer"
+              text="Créer l'événement"
+              prefWidth="200"
+              style="-fx-background-color: #6a11cb; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 14px;"
+              onAction="#handleCreate">
+         <VBox.margin>
+            <Insets top="15.0" />
+         </VBox.margin>
       </Button>
-   </children>
-</AnchorPane>
+      <Button fx:id="retour"
+              text="Retour"
+              prefWidth="150"
+              style="-fx-background-color: #2575fc; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-size: 12px;"
+              onAction="#handleRetour">
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </Button>
+
+   </VBox>
+</StackPane>

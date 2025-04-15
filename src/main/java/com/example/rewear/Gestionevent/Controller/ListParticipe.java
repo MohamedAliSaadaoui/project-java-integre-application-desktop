@@ -10,14 +10,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,31 +36,16 @@ import java.util.ResourceBundle;
 
 public class ListParticipe implements Initializable {
     @FXML
-    private TableView<Participe> participationsTable;
-
-    @FXML
-    private TableColumn<Participe, Long> idColumn;
-
-    @FXML
-    private TableColumn<Participe, Long> eventIdColumn;
-
-    @FXML
-    private TableColumn<Participe, LocalDate> dateParticipationColumn;
-
-    @FXML
-    private TableColumn<Participe, String> nomEventColumn;
-
-    @FXML
-    private TableColumn<Participe, String> lieuColumn;
-
-    @FXML
-    private TableColumn<Participe, String> periodeColumn;
-
-    @FXML
-    private TableColumn<Participe, Void> actionsColumn;
+    private FlowPane participationsCardsContainer;
 
     @FXML
     private Button btnRetour;
+
+    @FXML
+    private Button refreshButton;
+
+    @FXML
+    private ImageView logoImageView;
 
     private Long userId;
     private ParticipeDAO participeDAO;
@@ -61,95 +54,17 @@ public class ListParticipe implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialisation de base
+        // Initialisation des DAO
         participeDAO = new ParticipeDAO();
         eventDAO = new EventDAO();
 
-        // Configuration des colonnes
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        eventIdColumn.setCellValueFactory(new PropertyValueFactory<>("id_event_id"));
-        dateParticipationColumn.setCellValueFactory(new PropertyValueFactory<>("dateParticipation"));
-
-        // Configuration de la colonne nom d'événement (nécessite une conversion)
-        nomEventColumn.setCellValueFactory(cellData -> {
-            Long eventId = cellData.getValue().getId_event_id();
-            Event event = eventDAO.getEventById(eventId);
-            return event != null ? new javafx.beans.property.SimpleStringProperty(event.getTitre())
-                    : new javafx.beans.property.SimpleStringProperty("N/A");
-        });
-
-        // Configuration de la colonne lieu
-        lieuColumn.setCellValueFactory(cellData -> {
-            Long eventId = cellData.getValue().getId_event_id();
-            Event event = eventDAO.getEventById(eventId);
-            return event != null ? new javafx.beans.property.SimpleStringProperty(event.getLieu())
-                    : new javafx.beans.property.SimpleStringProperty("N/A");
-        });
-
-        // Configuration de la colonne période
-        periodeColumn.setCellValueFactory(cellData -> {
-            Long eventId = cellData.getValue().getId_event_id();
-            Event event = eventDAO.getEventById(eventId);
-            if (event != null) {
-                String periode = event.getDateDebut().toString() + " au " + event.getDateFin().toString();
-                return new javafx.beans.property.SimpleStringProperty(periode);
-            } else {
-                return new javafx.beans.property.SimpleStringProperty("N/A");
-            }
-        });
-
-        // Configuration de la colonne d'actions
-        setupActionsColumn();
-    }
-
-    /**
-     * Configure la colonne d'actions avec les boutons Modifier et Annuler
-     */
-    private void setupActionsColumn() {
-        actionsColumn.setCellFactory(new Callback<TableColumn<Participe, Void>, TableCell<Participe, Void>>() {
-            @Override
-            public TableCell<Participe, Void> call(final TableColumn<Participe, Void> param) {
-                return new TableCell<Participe, Void>() {
-                    private final Button modifierBtn = new Button("Modifier");
-                    private final Button annulerBtn = new Button("Annuler");
-                    private final HBox pane = new HBox(5, modifierBtn, annulerBtn);
-
-                    {
-                        // Style des boutons
-                        modifierBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                        annulerBtn.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
-
-                        // Action du bouton Modifier
-                        modifierBtn.setOnAction(event -> {
-                            Participe participe = getTableView().getItems().get(getIndex());
-                            Event evenement = eventDAO.getEventById(participe.getId_event_id());
-                            if (evenement != null) {
-                                ouvrirFormulaireModification(participe, evenement);
-                            } else {
-                                showAlert(Alert.AlertType.ERROR, "Erreur",
-                                        "Impossible de trouver l'événement associé à cette participation.");
-                            }
-                        });
-
-                        // Action du bouton Annuler
-                        annulerBtn.setOnAction(event -> {
-                            Participe participe = getTableView().getItems().get(getIndex());
-                            confirmerAnnulation(participe);
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(pane);
-                        }
-                    }
-                };
-            }
-        });
+        // Chargement du logo
+        try {
+            Image logo = new Image(getClass().getResourceAsStream("/com/example/rewear/images/logo.png"));
+            logoImageView.setImage(logo);
+        } catch (Exception e) {
+            System.err.println("Impossible de charger le logo: " + e.getMessage());
+        }
     }
 
     /**
@@ -161,7 +76,7 @@ public class ListParticipe implements Initializable {
     }
 
     /**
-     * Charge les participations de l'utilisateur
+     * Charge les participations de l'utilisateur et les affiche sous forme de cartes
      */
     public void chargerParticipations() {
         if (userId == null) return;
@@ -170,12 +85,94 @@ public class ListParticipe implements Initializable {
             List<Participe> participations = participeDAO.obtenirParUserId(userId);
             participationsList.clear();
             participationsList.addAll(participations);
-            participationsTable.setItems(participationsList);
+
+            // Vider le conteneur avant d'ajouter les nouvelles cartes
+            participationsCardsContainer.getChildren().clear();
+
+            // Créer une carte pour chaque participation
+            for (Participe participation : participationsList) {
+                // Récupérer l'événement associé
+                Event event = eventDAO.getEventById(participation.getId_event_id());
+
+                if (event != null) {
+                    // Créer une carte
+                    VBox card = createParticipationCard(participation, event);
+                    participationsCardsContainer.getChildren().add(card);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible de charger les participations: " + e.getMessage());
         }
+    }
+
+    /**
+     * Crée une carte pour une participation avec un titre mis en évidence
+     */
+    private VBox createParticipationCard(Participe participation, Event event) {
+        // Création de la carte (VBox)
+        VBox card = new VBox();
+        card.getStyleClass().add("participation-card");
+        card.setStyle("-fx-background-color: white; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);");
+        card.setPrefWidth(250);
+        card.setPrefHeight(220); // Légèrement plus haut pour accommoder le titre
+        card.setSpacing(8);
+
+        // Création d'un conteneur pour le titre avec fond coloré
+        VBox titleContainer = new VBox();
+        titleContainer.setStyle("-fx-background-color: #6a11cb; -fx-background-radius: 15 15 0 0; -fx-padding: 10;");
+        titleContainer.setPrefWidth(250);
+        titleContainer.setAlignment(Pos.CENTER);
+
+        // Création du label pour le titre
+        Label nomEventLabel = new Label(event.getTitre());
+        nomEventLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-wrap-text: true;");
+        nomEventLabel.setAlignment(Pos.CENTER);
+        nomEventLabel.setWrapText(true);
+        titleContainer.getChildren().add(nomEventLabel);
+
+        // Conteneur pour le contenu de la carte
+        VBox contentContainer = new VBox();
+        contentContainer.setPadding(new Insets(15, 15, 15, 15));
+        contentContainer.setSpacing(8);
+
+        // Création des labels pour les informations
+        Label lieuLabel = new Label("Lieu: " + event.getLieu());
+        lieuLabel.setStyle("-fx-font-size: 12px;");
+
+        String periode = event.getDateDebut().toString() + " au " + event.getDateFin().toString();
+        Label periodeLabel = new Label("Période: " + periode);
+        periodeLabel.setStyle("-fx-font-size: 12px;");
+
+        Label dateInscriptionLabel = new Label("Inscrit le: " + participation.getDateParticipation());
+        dateInscriptionLabel.setStyle("-fx-font-size: 12px;");
+
+        // Création des boutons
+        HBox buttonBox = new HBox();
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(10);
+        VBox.setVgrow(buttonBox, Priority.ALWAYS);
+
+        Button modifierBtn = new Button("Modifier");
+        modifierBtn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20;");
+        modifierBtn.setPrefWidth(100);
+        modifierBtn.setOnAction(event1 -> ouvrirFormulaireModification(participation, event));
+
+        Button annulerBtn = new Button("Annuler");
+        annulerBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 20;");
+        annulerBtn.setPrefWidth(100);
+        annulerBtn.setOnAction(event1 -> confirmerAnnulation(participation));
+
+        buttonBox.getChildren().addAll(modifierBtn, annulerBtn);
+
+        // Assemblage du contenu de la carte
+        contentContainer.getChildren().addAll(lieuLabel, periodeLabel, dateInscriptionLabel, buttonBox);
+
+        // Assemblage de la carte complète
+        card.getChildren().addAll(titleContainer, contentContainer);
+
+        return card;
     }
 
     /**
@@ -251,6 +248,14 @@ public class ListParticipe implements Initializable {
     private void handleRetour(ActionEvent event) {
         Stage stage = (Stage) btnRetour.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Gère le bouton d'actualisation
+     */
+    @FXML
+    private void handleRefresh(ActionEvent event) {
+        chargerParticipations();
     }
 
     /**
